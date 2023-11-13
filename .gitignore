@@ -1,0 +1,7 @@
+# Visual Studio Code
+/.vscode
+
+# Compiled files
+.out
+.o
+fdf

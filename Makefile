@@ -53,9 +53,10 @@ clean:
 	make -C ${MLX_DIR} clean
 	${RM} ${OBJS}
 
-fclean: clean
+fclean:
 	make -C ${LIBFT_DIR} fclean
 	make -C ${MLX_DIR} clean
+	${RM} ${OBJS}
 	${RM} ${NAME}
 
 re: fclean all
