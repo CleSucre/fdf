@@ -4,4 +4,5 @@
 # Compiled files
 .out
 .o
+obj/
 fdf
