@@ -22,7 +22,7 @@ endif
 
 NAME		= fdf
 
-SRCS		= ft_fdf.c
+SRCS		= main.c
 
 OBJS		= ${SRCS:.c=.o}
 
