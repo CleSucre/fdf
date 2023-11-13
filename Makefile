@@ -24,7 +24,11 @@ NAME		= fdf
 
 SRCS		= main.c
 
-OBJS		= ${SRCS:.c=.o}
+OBJ_PATH	= obj${DIRSEP}
+
+OBJ_NAME	= ${SRCS:%.c=%.o}
+
+OBJS		= ${addprefix ${OBJ_PATH}, ${OBJ_NAME}}
 
 CC			= gcc
 
@@ -38,7 +42,8 @@ CFLAGS		= -Wall -Wextra -Werror -I ${HEAD}
 
 MLX = -L ${MLX_DIR}
 
-%.o : %.c
+${OBJ_PATH}%.o : %.c
+	mkdir -p ${@D} 2> /dev/null || true
 	${CC} ${CFLAGS} -o $@ -c $<
 
 ${NAME}: ${OBJS}
@@ -51,12 +56,12 @@ all: ${NAME}
 clean: 
 	make -C ${LIBFT_DIR} clean
 	make -C ${MLX_DIR} clean
-	${RM} ${OBJS}
+	${RM} -r ${OBJ_PATH} 2> /dev/null || true
 
 fclean:
 	make -C ${LIBFT_DIR} fclean
 	make -C ${MLX_DIR} clean
-	${RM} ${OBJS}
+	${RM} -r ${OBJ_PATH} 2> /dev/null || true
 	${RM} ${NAME}
 
 re: fclean all
