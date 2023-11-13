@@ -22,7 +22,7 @@ endif
 
 NAME		= fdf
 
-SRCS		= main.c
+SRCS		= main.c ft_fdf.c ft_utils.c
 
 OBJ_PATH	= obj${DIRSEP}
 
@@ -40,8 +40,6 @@ MLX_DIR		= minilibx
 
 CFLAGS		= -Wall -Wextra -Werror -I ${HEAD}
 
-MLX = -L ${MLX_DIR}
-
 ${OBJ_PATH}%.o : %.c
 	mkdir -p ${@D} 2> /dev/null || true
 	${CC} ${CFLAGS} -o $@ -c $<
@@ -49,7 +47,7 @@ ${OBJ_PATH}%.o : %.c
 ${NAME}: ${OBJS}
 	make -C ${LIBFT_DIR}
 	make -C ${MLX_DIR}
-	${CC} ${CFLAGS} -o ${NAME} ${OBJS} -L ${LIBFT_DIR} ${MLX} -lft
+	${CC} ${CFLAGS} -o ${NAME} ${OBJS} -L ${LIBFT_DIR} -L ${MLX_DIR} -L ${MLX_DIR} -lft -lmlx -lXext -lX11 -lm
 
 all: ${NAME}
 

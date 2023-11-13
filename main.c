@@ -12,11 +12,6 @@
 
 #include "fdf.h"
 
-void ft_fdf(char *filename)
-{
-    (void)filename;
-}
-
 int main(int argc, char **argv)
 {
     if (argc != 2)
@@ -24,6 +19,5 @@ int main(int argc, char **argv)
         ft_printf("usage: ./fdf <filename>\n");
         return (0);
     }
-    ft_fdf(argv[1]);
-    return (0);
+    return (ft_fdf(argv[1]));
 }
