@@ -22,7 +22,7 @@ endif
 
 NAME		= fdf
 
-SRCS		= main.c ft_fdf.c ft_utils.c
+SRCS		= main.c ft_fdf.c ft_utils.c ft_actions.c
 
 OBJ_PATH	= obj${DIRSEP}
 

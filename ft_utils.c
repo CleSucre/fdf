@@ -13,32 +13,46 @@
 #include "fdf.h"
 #include <stdio.h>
 
-int action_window(int keycode, t_win *data)
+void    ft_debug_vector2(t_vector2 vector2)
 {
-    ft_printf("action_window keycode = %u\n", keycode);
-    if (keycode == 65307)
-    {
-        mlx_destroy_window(data->mlx_ptr, data->win_ptr);
-        exit(0);
-    }
-    return (0);
+    ft_printf("(%f,%f)", vector2.x, vector2.y);
 }
 
+void    ft_debug_map(t_map *map)
+{
+    int i;
+    int j;
+
+    i = 0;
+    while (i < map->maxY)
+    {
+        j = 0;
+        while (j < map->maxX)
+        {
+            ft_debug_vector2(map->map[i][j]);
+            j++;
+        }
+        ft_printf("\n");
+        i++;
+    }
+}
+
+//completly wrong....
 t_vector2 ft_3dto2d(t_vector3 pos, t_vector3 viewPos, t_vector3 viewPosProjection, int screenWidth, int screenHeight)
 {
     t_vector2   result;
     float       scale;
 
-    printf("convert 3d to 2d:\n");
-    printf("pos.x = %f\npos.y = %f\npos.z = %f\n", pos.x, pos.y, pos.z);
+    //printf("convert 3d to 2d:\n");
+    //printf("pos.x = %f\npos.y = %f\npos.z = %f\n", pos.x, pos.y, pos.z);
     pos.x -= viewPos.x;
     pos.y -= viewPos.y;
     pos.z -= viewPos.z;
     // Projection de la position sur le plan de projection
     scale = viewPosProjection.z / pos.z;
-    result.x = pos.x * scale + screenWidth / 2;
-    result.y = -pos.y * scale + screenHeight / 2;  // Inversion de l'axe y pour correspondre à la convention d'écran
-    printf("result.x = %f\nresult.y = %f\n", result.x, result.y);
+    result.x = pos.x * scale + screenWidth / 4;
+    result.y = -pos.y * scale + screenHeight / 1.5;  // Inversion de l'axe y pour correspondre à la convention d'écran
+    //printf("result.x = %f\nresult.y = %f\n", result.x, result.y);
     return (result);
 }
 
@@ -66,27 +80,24 @@ void    ft_draw_line(t_win *data, t_vector2 pos1, t_vector2 pos2)
 
 void ft_draw_line(t_win *data, t_vector2 pos1, t_vector2 pos2)
 {
-    int dx = abs(pos2.x - pos1.x);
-    int dy = abs(pos2.y - pos1.y);
-    int sx = (pos1.x < pos2.x) ? 1 : -1;
-    int sy = (pos1.y < pos2.y) ? 1 : -1;
-    int err = dx - dy;
-    while (1)
+    int     i;
+    float   t;
+    int     steps;
+    t_vector2 currentPoint;
+
+
+    //print distance between points
+    ft_printf("drawing line:\n1x: %f\n1y: %f\n2x: %f\n2y: %f\n", pos1.x, pos1.y, pos2.x, pos2.y);
+    //printf("distance = %f\n", sqrt(pow(pos2.x - pos1.x, 2) + pow(pos2.y - pos1.y, 2)));
+    i = 0;
+    steps = sqrt(pow(pos2.x - pos1.x, 2) + pow(pos2.y - pos1.y, 2));
+    while (i < steps)
     {
-        mlx_pixel_put(data->mlx_ptr, data->win_ptr, pos1.x, pos1.y, MAP_COLOR);
-        if (pos1.x == pos2.x && pos1.y == pos2.y)
-            break;
-        int e2 = 2 * err;
-        if (e2 > -dy)
-        {
-            err -= dy;
-            pos1.x += sx;
-        }
-        if (e2 < dx)
-        {
-            err += dx;
-            pos1.y += sy;
-        }
+        t = (float)i / (float)steps;
+        currentPoint.x = pos1.x + (pos2.x - pos1.x) * t;
+        currentPoint.y = pos1.y + (pos2.y - pos1.y) * t;
+        mlx_pixel_put(data->mlx_ptr, data->win_ptr, currentPoint.x, currentPoint.y, MAP_COLOR);
+        i++;
     }
 }
 
@@ -163,44 +174,41 @@ t_map   *ft_get_map_from_file(int fd)
     map = ft_init_map(i, ft_count_words(lines[0], ' '));
     ft_printf("maxX = %d\nmaxY = %d\n", map->maxX, map->maxY);
     i = 0;
-    while (lines[i])
+    while (lines[i] && i < map->maxY)
     {
         positions = ft_split(lines[i], ' ');
         j = 0;
-        while (positions[j])
+        while (positions[j] && j < map->maxX)
         {
             tz = ft_atoi(positions[j]) + 1;
             map->map[i][j] = ft_3dto2d(
                 ft_make_vector3(j, i, tz),
                 ft_make_vector3(0, 0, 0), //camera position
-                ft_make_vector3(0, 0, 10.0f), //camera position projection
-                500,
-                500
+                ft_make_vector3(0, 0, 50.0f), //camera position projection
+                SCREEN_WIDTH,
+                SCREEN_HEIGHT
             );
+            ft_debug_vector2(map->map[i][j]);
             j++;
         }
         i++;
     }
+    //ft_debug_map(map);
     return (map);
 }
 
-void    ft_debug_map(t_map *map)
+void    ft_free_map(t_map *map)
 {
     int i;
-    int j;
 
     i = 0;
     while (i < map->maxY)
     {
-        j = 0;
-        while (j < map->maxX)
-        {
-            printf("(%f,%f)", map->map[i][j].x, map->map[i][j].y);
-            j++;
-        }
-        ft_printf("\n");
+        free(map->map[i]);
         i++;
     }
+    free(map->map);
+    free(map);
 }
 
 int ft_draw_map(t_win win, t_map *map)
@@ -208,18 +216,23 @@ int ft_draw_map(t_win win, t_map *map)
     int i;
     int j;
 
-    ft_debug_map(map);
+    //ft_draw_line(&win, ft_make_vector2(0, 0), ft_make_vector2(200, 200));
     i = 0;
     while (i < map->maxY)
     {
         j = 0;
         while (j < map->maxX)
         {
-            //ft_printf("i = %d, j = %d\n", i, j);
             if (j + 1 < map->maxX)
+            {
+                ft_printf("using matrix X %d %d\n", i, j + 1);
                 ft_draw_line(&win, map->map[i][j], map->map[i][j + 1]);
+            }
             if (i + 1 < map->maxY)
+            {
+                ft_printf("using matrix Y %d %d\n", i + 1, j);
                 ft_draw_line(&win, map->map[i][j], map->map[i + 1][j]);
+            }
             j++;
         }
         i++;
