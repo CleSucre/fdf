@@ -52,4 +52,4 @@ To use the FDF program, follow these steps:
 
 The FDF program requires map files that define the landscape. These files contain a grid of integer values, where each value represents the height of a point on the grid. Exemple files are provided in the `test_maps` directory.
 
-:construction: **Note: This project is currently under development and has not been thoroughly tested. Use at your own risk.** :construction:
+:warning: **Note: This project is currently under development and has not been thoroughly tested. Use at your own risk.** :warning:
