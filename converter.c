@@ -13,8 +13,9 @@
 #include "fdf.h"
 #include <stdio.h>
 
-t_vector2   ft_3dto2d(t_vector3 point, t_camera camera, int screenWidth, int screenHeight)
+t_vector2   ft_3dto2d(t_vector3 point, t_camera camera, int screenWidth, int screenHeight, int force)
 {
+    (void)force;
     // Translation du point par rapport à la position de la caméra
     point.x -= camera.pos.x;
     point.y -= camera.pos.y;
@@ -48,10 +49,22 @@ t_vector2   ft_3dto2d(t_vector3 point, t_camera camera, int screenWidth, int scr
 
     // Mappage des coordonnées 2D à l'écran
     t_vector2 projectedPoint;
+
+    // Check if the point is within the normalized device coordinates
+    if (fabs(point.x) <= 2.0f && fabs(point.y) <= 2.0f && force == 0) {
+        projectedPoint.x = (point.x + 1.0f) * 0.5f * screenWidth;
+        projectedPoint.y = (1.0f - point.y) * 0.5f * screenHeight;
+    } else {
+        // If the point is outside the frustum, return null*
+        projectedPoint.x = 0;
+        projectedPoint.y = 0;
+    }
+    /*
     projectedPoint.x = (point.x + 1.0f) * 0.5f * screenWidth;
     projectedPoint.y = (1.0f - point.y) * 0.5f * screenHeight;
+    */
 
-    return projectedPoint;
+    return (projectedPoint);
 }
 
 t_map   *ft_get_map_from_file(int fd)
@@ -82,7 +95,7 @@ t_map   *ft_get_map_from_file(int fd)
         while (positions[j] && j < map->maxX)
         {
             tz = ft_atoi(positions[j]) + 1;
-            map->map[i][j] = ft_make_vector3(j, i, tz);
+            map->map[i][j] = ft_make_vector3(j, tz, i);
             ft_debug_vector3(map->map[i][j]);
             j++;
         }

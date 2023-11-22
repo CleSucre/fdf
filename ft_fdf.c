@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "fdf.h"
+#include "key_map.h"
 
 t_win  ft_init_window(char *filename)
 {
@@ -33,7 +34,8 @@ void    ft_init_keymap(t_win *win, t_map *map)
     }
     params->win = win;
     params->map = map;
-    mlx_key_hook(win->win_ptr, action_window, params);
+    //wtf is this?
+    mlx_hook(win->win_ptr, 2, 1L<<0, action_window, params);
 }
 
 int    ft_fdf(char *filename)
@@ -48,10 +50,10 @@ int    ft_fdf(char *filename)
     win = ft_init_window(filename);
     ft_init_keymap(&win, map);
     camera = ft_make_camera(
-        ft_make_vector3(0, 0, 0),
-        0,
-        0,
-        3
+        ft_make_vector3(100, 100, 100),
+        180,
+        180,
+        100
     );
     map->camera = camera;
 

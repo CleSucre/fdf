@@ -19,7 +19,7 @@
 # include <math.h>
 # include <fcntl.h>
 
-# define MAP_COLOR HEX_WHITE
+# define MAP_COLOR HEX_BLUE
 # define SCREEN_WIDTH 1920
 # define SCREEN_HEIGHT 1080
 
@@ -87,7 +87,7 @@ typedef struct s_key_params
 int         ft_fdf(char *filename);
 int         action_window(int keycode, t_key_params *params);
 
-t_vector2   ft_3dto2d(t_vector3 point, t_camera camera, int screenWidth, int screenHeight);
+t_vector2   ft_3dto2d(t_vector3 point, t_camera camera, int screenWidth, int screenHeight, int force);
 t_map       *ft_get_map_from_file(int fd);
 
 t_vector3   ft_make_vector3(float x, float y, float z);

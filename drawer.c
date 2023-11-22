@@ -38,7 +38,9 @@ void    ft_draw_map(t_win *win, t_map *map)
 {
     int i;
     int j;
-
+    t_vector2   tmp1;
+    t_vector2   tmp2;
+    
     //ft_draw_line(&win, ft_make_vector2(0, 0), ft_make_vector2(200, 200));
     i = 0;
     while (i < map->maxY)
@@ -46,24 +48,61 @@ void    ft_draw_map(t_win *win, t_map *map)
         j = 0;
         while (j < map->maxX)
         {
-            //TODO: dont draw whats not in frustum
+            /*
             if (j + 1 < map->maxX)
             {
-                //ft_printf("using matrix X %d %d\n", i, j + 1);
+                tmp1 = ft_3dto2d(map->map[i][j], map->camera, SCREEN_WIDTH, SCREEN_HEIGHT, 0);
+                tmp2 = ft_3dto2d(map->map[i][j + 1], map->camera, SCREEN_WIDTH, SCREEN_HEIGHT, 0);
                 ft_draw_line(
                     win,
-                    ft_3dto2d(map->map[i][j], map->camera, SCREEN_WIDTH, SCREEN_HEIGHT),
-                    ft_3dto2d(map->map[i][j + 1], map->camera, SCREEN_WIDTH, SCREEN_HEIGHT)
+                    tmp1,
+                    tmp2
                 );
             }
             if (i + 1 < map->maxY)
             {
                 //ft_printf("using matrix Y %d %d\n", i + 1, j);
+                tmp1 = ft_3dto2d(map->map[i][j], map->camera, SCREEN_WIDTH, SCREEN_HEIGHT, 0);
+                tmp2 = ft_3dto2d(map->map[i + 1][j], map->camera, SCREEN_WIDTH, SCREEN_HEIGHT, 0);
                 ft_draw_line(
                     win,
-                    ft_3dto2d(map->map[i][j], map->camera, SCREEN_WIDTH, SCREEN_HEIGHT),
-                    ft_3dto2d(map->map[i + 1][j], map->camera, SCREEN_WIDTH, SCREEN_HEIGHT)
+                    tmp1,
+                    tmp2
                 );
+            }
+            */
+            if (j + 1 < map->maxX)
+            {
+                tmp1 = ft_3dto2d(map->map[i][j], map->camera, SCREEN_WIDTH, SCREEN_HEIGHT, 0);
+                if (tmp1.x != 0 && tmp1.y != 0)
+                {
+                    tmp2 = ft_3dto2d(map->map[i][j + 1], map->camera, SCREEN_WIDTH, SCREEN_HEIGHT, 0);
+                    if (tmp2.x != 0 && tmp2.y != 0)
+                    {
+                        ft_draw_line(
+                            win,
+                            tmp1,
+                            tmp2
+                        );
+                    }
+                }
+            }
+            if (i + 1 < map->maxY)
+            {
+                //ft_printf("using matrix Y %d %d\n", i + 1, j);
+                tmp1 = ft_3dto2d(map->map[i][j], map->camera, SCREEN_WIDTH, SCREEN_HEIGHT, 0);
+                if (tmp1.x != 0 && tmp1.y != 0)
+                {
+                    tmp2 = ft_3dto2d(map->map[i + 1][j], map->camera, SCREEN_WIDTH, SCREEN_HEIGHT, 0);
+                    if (tmp2.x != 0 && tmp2.y != 0)
+                    {
+                        ft_draw_line(
+                            win,
+                            tmp1,
+                            tmp2
+                        );
+                    }
+                }
             }
             j++;
         }
