@@ -13,7 +13,7 @@
 #include "fdf.h"
 
 // Fonction de dessin de ligne à partir de deux vecteurs 2D
-void ft_draw_line(t_win *data, t_vector2 point1, t_vector2 point2) {
+void ft_draw_line(void *mlx_ptr, void *win_ptr, t_vector2 point1, t_vector2 point2) {
     t_vector2   delta;
     t_vector2   currentPoint;
     int         steps;
@@ -21,7 +21,15 @@ void ft_draw_line(t_win *data, t_vector2 point1, t_vector2 point2) {
 
     //printf("drawing line:\n1x: %f\n1y: %f\n2x: %f\n2y: %f\n", point1.pos.x, point1.pos.y, point2.pos.x, point2.pos.y);
     delta.x = point2.x - point1.x;
+    if (delta.x >= SCREEN_HEIGHT || delta.x <= -SCREEN_HEIGHT)
+    {
+        return ;
+    }
     delta.y = point2.y - point1.y;
+    if (delta.y >= SCREEN_HEIGHT || delta.y <= -SCREEN_HEIGHT)
+    {
+        return ;
+    }
     steps = sqrt(pow(delta.x, 2) + pow(delta.y, 2));
     i = 0;
     while (i < steps)
@@ -29,7 +37,7 @@ void ft_draw_line(t_win *data, t_vector2 point1, t_vector2 point2) {
         float t = (float)i / (float)steps;
         currentPoint.x = point1.x + (delta.x * t);
         currentPoint.y = point1.y + (delta.y * t);
-        mlx_pixel_put(data->mlx_ptr, data->win_ptr, currentPoint.x, currentPoint.y, MAP_COLOR);
+        mlx_pixel_put(mlx_ptr, win_ptr, currentPoint.x, currentPoint.y, MAP_COLOR);
         i++;
     }
 }
@@ -38,68 +46,52 @@ void    ft_draw_map(t_win *win, t_map *map)
 {
     int i;
     int j;
-    t_vector2   tmp1;
-    t_vector2   tmp2;
+    void    *mlx_ptr;
+
+    if (win->ptr_use == FALSE)
+    {
+        mlx_ptr = win->mlx_ptr;
+        win->ptr_use = TRUE;
+    }
+    else
+    {
+        mlx_ptr = win->mlx_ptr2;
+        win->ptr_use = FALSE;
+    }
     
-    //ft_draw_line(&win, ft_make_vector2(0, 0), ft_make_vector2(200, 200));
+    //set do_flush to 0 in mlx_loop_hook to avoid flickering
     i = 0;
     while (i < map->maxY)
     {
         j = 0;
         while (j < map->maxX)
         {
-            /*
             if (j + 1 < map->maxX)
             {
-                tmp1 = ft_3dto2d(map->map[i][j], map->camera, SCREEN_WIDTH, SCREEN_HEIGHT, 0);
-                tmp2 = ft_3dto2d(map->map[i][j + 1], map->camera, SCREEN_WIDTH, SCREEN_HEIGHT, 0);
-                ft_draw_line(
-                    win,
-                    tmp1,
-                    tmp2
-                );
-            }
-            if (i + 1 < map->maxY)
-            {
-                //ft_printf("using matrix Y %d %d\n", i + 1, j);
-                tmp1 = ft_3dto2d(map->map[i][j], map->camera, SCREEN_WIDTH, SCREEN_HEIGHT, 0);
-                tmp2 = ft_3dto2d(map->map[i + 1][j], map->camera, SCREEN_WIDTH, SCREEN_HEIGHT, 0);
-                ft_draw_line(
-                    win,
-                    tmp1,
-                    tmp2
-                );
-            }
-            */
-            if (j + 1 < map->maxX)
-            {
-                tmp1 = ft_3dto2d(map->map[i][j], map->camera, SCREEN_WIDTH, SCREEN_HEIGHT, 0);
-                if (tmp1.x != 0 && tmp1.y != 0)
+                if (map->map_vector2[i][j].x != 0 && map->map_vector2[i][j].y != 0)
                 {
-                    tmp2 = ft_3dto2d(map->map[i][j + 1], map->camera, SCREEN_WIDTH, SCREEN_HEIGHT, 0);
-                    if (tmp2.x != 0 && tmp2.y != 0)
+                    if (map->map_vector2[i][j + 1].x != 0 && map->map_vector2[i][j + 1].y != 0)
                     {
                         ft_draw_line(
-                            win,
-                            tmp1,
-                            tmp2
+                            mlx_ptr,
+                            win->win_ptr,
+                            map->map_vector2[i][j],
+                            map->map_vector2[i][j + 1]
                         );
                     }
                 }
             }
             if (i + 1 < map->maxY)
             {
-                //ft_printf("using matrix Y %d %d\n", i + 1, j);
-                tmp1 = ft_3dto2d(map->map[i][j], map->camera, SCREEN_WIDTH, SCREEN_HEIGHT, 0);
-                if (tmp1.x != 0 && tmp1.y != 0)
+                if (map->map_vector2[i][j].x != 0 && map->map_vector2[i][j].y != 0)
                 {
-                    tmp2 = ft_3dto2d(map->map[i + 1][j], map->camera, SCREEN_WIDTH, SCREEN_HEIGHT, 0);
-                    if (tmp2.x != 0 && tmp2.y != 0)
+                    if (map->map_vector2[i + 1][j].x != 0 && map->map_vector2[i + 1][j].y != 0)
                     {
                         ft_draw_line(
-                            win,
-                            tmp1,
-                            tmp2
+                            mlx_ptr,
+                            win->win_ptr,
+                            map->map_vector2[i][j],
+                            map->map_vector2[i + 1][j]
                         );
                     }
                 }
@@ -112,6 +104,18 @@ void    ft_draw_map(t_win *win, t_map *map)
 
 void ft_refresh_window(t_win *win, t_map *map)
 {
-    mlx_clear_window(win->mlx_ptr, win->win_ptr);
+    void    *mlx_ptr_to_clear;
+    ft_convert_to_map_vector2(map);
+    if (win->ptr_use == FALSE)
+    {
+        mlx_ptr_to_clear = win->mlx_ptr2;
+        win->ptr_use = TRUE;
+    }
+    else
+    {
+        mlx_ptr_to_clear = win->mlx_ptr;
+        win->ptr_use = FALSE;
+    }
+    mlx_clear_window(mlx_ptr_to_clear, win->win_ptr);
     ft_draw_map(win, map);
-}   
+}

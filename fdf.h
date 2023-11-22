@@ -20,8 +20,8 @@
 # include <fcntl.h>
 
 # define MAP_COLOR HEX_BLUE
-# define SCREEN_WIDTH 1920
-# define SCREEN_HEIGHT 1080
+# define SCREEN_WIDTH 800
+# define SCREEN_HEIGHT 500
 
 typedef enum e_bool
 {
@@ -32,7 +32,9 @@ typedef enum e_bool
 typedef struct s_win
 {
     void    *mlx_ptr;
+    void    *mlx_ptr2;
     void    *win_ptr;
+    t_bool  ptr_use;
 }               t_win;
 
 //are we allowed to use float?
@@ -72,6 +74,7 @@ typedef void (*function_pointer)(t_win *, struct s_map *);
 typedef struct s_map
 {
     t_vector3   **map;
+    t_vector2   **map_vector2;
     int         maxX;
     int         maxY;
     t_camera    camera;
@@ -87,7 +90,7 @@ typedef struct s_key_params
 int         ft_fdf(char *filename);
 int         action_window(int keycode, t_key_params *params);
 
-t_vector2   ft_3dto2d(t_vector3 point, t_camera camera, int screenWidth, int screenHeight, int force);
+t_vector2   ft_3dto2d(t_vector3 point, t_camera camera, int screenWidth, int screenHeight);
 t_map       *ft_get_map_from_file(int fd);
 
 t_vector3   ft_make_vector3(float x, float y, float z);
@@ -96,7 +99,8 @@ t_camera    ft_make_camera(t_vector3 pos, float yaw, float pitch, float fov);
 t_map       *ft_init_map(int maxX, int maxY);
 void        ft_free_map(t_map *map);
 
-void        ft_draw_line(t_win *data, t_vector2 point1, t_vector2 point2);
+void        ft_draw_line(void *mlx_ptr, void *win_ptr, t_vector2 point1, t_vector2 point2);
+void        ft_convert_to_map_vector2(t_map *map);
 void        ft_draw_map(t_win *win, t_map *map);
 void        ft_refresh_window(t_win *win, t_map *map);
 

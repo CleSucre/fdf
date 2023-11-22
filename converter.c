@@ -13,9 +13,7 @@
 #include "fdf.h"
 #include <stdio.h>
 
-t_vector2   ft_3dto2d(t_vector3 point, t_camera camera, int screenWidth, int screenHeight, int force)
-{
-    (void)force;
+t_vector2 ft_3dto2d(t_vector3 point, t_camera camera, int screenWidth, int screenHeight) {
     // Translation du point par rapport à la position de la caméra
     point.x -= camera.pos.x;
     point.y -= camera.pos.y;
@@ -51,20 +49,47 @@ t_vector2   ft_3dto2d(t_vector3 point, t_camera camera, int screenWidth, int scr
     t_vector2 projectedPoint;
 
     // Check if the point is within the normalized device coordinates
-    if (fabs(point.x) <= 2.0f && fabs(point.y) <= 2.0f && force == 0) {
+    if (fabs(point.x) <= 1.0f && fabs(point.y) <= 1.0f) {
         projectedPoint.x = (point.x + 1.0f) * 0.5f * screenWidth;
         projectedPoint.y = (1.0f - point.y) * 0.5f * screenHeight;
     } else {
-        // If the point is outside the frustum, return null*
-        projectedPoint.x = 0;
-        projectedPoint.y = 0;
+        // If the point is outside the frustum, return a null vector
+        projectedPoint.x = projectedPoint.y = 0.0f;
     }
-    /*
-    projectedPoint.x = (point.x + 1.0f) * 0.5f * screenWidth;
-    projectedPoint.y = (1.0f - point.y) * 0.5f * screenHeight;
-    */
 
-    return (projectedPoint);
+    return projectedPoint;
+}
+
+void    ft_convert_to_map_vector2(t_map *map)
+{
+    t_vector2   **map_vector2;
+    int         i;
+    int         j;
+
+    map_vector2 = (t_vector2 **)malloc(sizeof(t_vector2 *) * map->maxY);
+    if (map_vector2 == NULL)
+    {
+        ft_printf("malloc error in ft_make_map_vector2\n");
+        exit(0);
+    }
+    i = 0;
+    while (i < map->maxY)
+    {
+        map_vector2[i] = (t_vector2 *)malloc(sizeof(t_vector2) * map->maxX);
+        if (map_vector2[i] == NULL)
+        {
+            ft_printf("malloc error in ft_make_map_vector2\n");
+            exit(0);
+        }
+        j = 0;
+        while (j < map->maxX)
+        {
+            map_vector2[i][j] = ft_3dto2d(map->map[i][j], map->camera, SCREEN_WIDTH, SCREEN_HEIGHT);
+            j++;
+        }
+        i++;
+    }
+    map->map_vector2 = map_vector2;
 }
 
 t_map   *ft_get_map_from_file(int fd)
@@ -95,12 +120,10 @@ t_map   *ft_get_map_from_file(int fd)
         while (positions[j] && j < map->maxX)
         {
             tz = ft_atoi(positions[j]) + 1;
-            map->map[i][j] = ft_make_vector3(j, tz, i);
-            ft_debug_vector3(map->map[i][j]);
+            map->map[i][j] = ft_make_vector3(j, tz / 2, i);
             j++;
         }
         i++;
     }
-    //ft_debug_map(map);
     return (map);
 }
