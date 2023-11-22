@@ -22,7 +22,7 @@ endif
 
 NAME		= fdf
 
-SRCS		= main.c ft_fdf.c ft_utils.c ft_actions.c
+SRCS		= main.c ft_fdf.c converter.c ft_actions.c maker.c debuger.c drawer.c
 
 OBJ_PATH	= obj${DIRSEP}
 
@@ -38,7 +38,7 @@ LIBFT_DIR	= libft
 
 MLX_DIR		= minilibx
 
-CFLAGS		= -g -I ${HEAD}
+CFLAGS		= -Wall -Werror -Wextra -g -I ${HEAD}
 
 ${OBJ_PATH}%.o : %.c
 	mkdir -p ${@D} 2> /dev/null || true

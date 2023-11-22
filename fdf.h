@@ -19,9 +19,15 @@
 # include <math.h>
 # include <fcntl.h>
 
-# define MAP_COLOR 0x00FF0000
+# define MAP_COLOR HEX_WHITE
 # define SCREEN_WIDTH 1920
 # define SCREEN_HEIGHT 1080
+
+typedef enum e_bool
+{
+    FALSE,
+    TRUE
+}               t_bool;
 
 typedef struct s_win
 {
@@ -34,37 +40,68 @@ typedef struct s_win
 
 typedef struct s_vector2
 {
-    float x;
-    float y;
+    float   x;
+    float   y;
 }               t_vector2;
 
 typedef struct s_vector3
 {
-    float x;
-    float y;
-    float z;
+    float   x;
+    float   y;
+    float   z;
 }               t_vector3;
+
+typedef struct s_point
+{
+    t_vector3   pos;
+    int         height;
+}               t_point;
+
+typedef struct s_camera
+{
+    t_vector3   pos;
+    float       yaw;
+    float       pitch;
+    float       fov;
+}               t_camera;
+
+struct s_map;
+
+typedef void (*function_pointer)(t_win *, struct s_map *);
 
 typedef struct s_map
 {
-    t_vector2       **map;
-    int             maxX;
-    int             maxY;
+    t_vector3   **map;
+    int         maxX;
+    int         maxY;
+    t_camera    camera;
+    function_pointer refresh_window;
 }               t_map;
 
-typedef struct s_line
+typedef struct s_key_params
 {
-    t_vector3    p1;
-    t_vector3    p2;
-}            t_line;
+    t_win       *win;
+    t_map       *map;
+}               t_key_params;
 
 int         ft_fdf(char *filename);
-int         action_window(int keycode, t_win *win);
-void        ft_draw_line(t_win *data, t_vector2 pos1, t_vector2 pos2);
-int         ft_draw_map(t_win win, t_map *map);
+int         action_window(int keycode, t_key_params *params);
+
+t_vector2   ft_3dto2d(t_vector3 point, t_camera camera, int screenWidth, int screenHeight);
+t_map       *ft_get_map_from_file(int fd);
+
+t_vector3   ft_make_vector3(float x, float y, float z);
+t_vector2   ft_make_vector2(float x, float y);
+t_camera    ft_make_camera(t_vector3 pos, float yaw, float pitch, float fov);
+t_map       *ft_init_map(int maxX, int maxY);
 void        ft_free_map(t_map *map);
 
-t_map   *ft_get_map_from_file(int fd);
-t_vector3   **ft_convert_map_to_vector3_map(int **map, int maxX, int maxY);
+void        ft_draw_line(t_win *data, t_vector2 point1, t_vector2 point2);
+void        ft_draw_map(t_win *win, t_map *map);
+void        ft_refresh_window(t_win *win, t_map *map);
+
+void        ft_debug_vector2(t_vector2 vector2);
+void        ft_debug_vector3(t_vector3 vector3);
+void        ft_debug_map(t_map *map);
 
 #endif

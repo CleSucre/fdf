@@ -18,23 +18,45 @@ t_win  ft_init_window(char *filename)
 
     win.mlx_ptr = mlx_init();
     win.win_ptr = mlx_new_window(win.mlx_ptr, SCREEN_WIDTH, SCREEN_HEIGHT, filename);
-    mlx_key_hook(win.win_ptr, action_window, &win);
     return (win);
 }
 
+void    ft_init_keymap(t_win *win, t_map *map)
+{
+    t_key_params    *params;
 
+    params = (t_key_params*)malloc(sizeof(t_key_params));
+    if (params == NULL)
+    {
+        ft_printf("malloc error in ft_init_keymap\n");
+        exit(0);
+    }
+    params->win = win;
+    params->map = map;
+    mlx_key_hook(win->win_ptr, action_window, params);
+}
 
 int    ft_fdf(char *filename)
 {
-    t_map   *map;
-    int     fd;
-    t_win  win;
+    t_map       *map;
+    t_camera    camera;
+    int         fd;
+    t_win       win;
 
     fd = open(filename, O_RDONLY);
     map = ft_get_map_from_file(fd);
     win = ft_init_window(filename);
-    
-    ft_draw_map(win, map);
+    ft_init_keymap(&win, map);
+    camera = ft_make_camera(
+        ft_make_vector3(0, 0, 0),
+        0,
+        0,
+        3
+    );
+    map->camera = camera;
+
+    map->refresh_window = ft_refresh_window;
+    ft_draw_map(&win, map);
     mlx_loop(win.mlx_ptr);
 
     close(fd);
