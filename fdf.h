@@ -32,13 +32,9 @@ typedef enum e_bool
 typedef struct s_win
 {
     void    *mlx_ptr;
-    void    *mlx_ptr2;
     void    *win_ptr;
-    t_bool  ptr_use;
+    void    *img_ptr;
 }               t_win;
-
-//are we allowed to use float?
-
 
 typedef struct s_vector2
 {
@@ -75,8 +71,8 @@ typedef struct s_map
 {
     t_vector3   **map;
     t_vector2   **map_vector2;
-    int         maxX;
-    int         maxY;
+    int         sizeX;
+    int         sizeY;
     t_camera    camera;
     function_pointer refresh_window;
 }               t_map;

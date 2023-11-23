@@ -28,10 +28,10 @@ void    ft_debug_map(t_map *map)
     int j;
 
     i = 0;
-    while (i < map->maxY)
+    while (i < map->sizeY)
     {
         j = 0;
-        while (j < map->maxX)
+        while (j < map->sizeX)
         {
             ft_debug_vector3(map->map[i][j]);
             j++;

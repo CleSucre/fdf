@@ -18,9 +18,8 @@ t_win  ft_init_window(char *filename)
     t_win win;
 
     win.mlx_ptr = mlx_init();
-    win.mlx_ptr2 = mlx_init();
     win.win_ptr = mlx_new_window(win.mlx_ptr, SCREEN_WIDTH, SCREEN_HEIGHT, filename);
-    win.ptr_use = FALSE;
+    win.img_ptr = NULL;
     return (win);
 }
 
@@ -36,35 +35,26 @@ void    ft_init_keymap(t_win *win, t_map *map)
     }
     params->win = win;
     params->map = map;
-    //wtf is this?
     mlx_hook(win->win_ptr, 2, 1L<<0, action_window, params);
 }
 
 int    ft_fdf(char *filename)
 {
     t_map       *map;
-    t_camera    camera;
     int         fd;
     t_win       win;
 
     fd = open(filename, O_RDONLY);
     map = ft_get_map_from_file(fd);
     close(fd);
+    if (map == NULL)
+        return (1);
     win = ft_init_window(filename);
     ft_init_keymap(&win, map);
-    camera = ft_make_camera(
-        ft_make_vector3(map->maxX, -map->maxY, map->maxY),
-        7.2,
-        1.2,
-        100
-    );
-    map->camera = camera;
 
-    map->refresh_window = ft_refresh_window;
-    ft_convert_to_map_vector2(map);
     ft_draw_map(&win, map);
     mlx_loop(win.mlx_ptr);
-
+ 
     ft_free_map(map);
     mlx_destroy_window(win.mlx_ptr, win.win_ptr);
     free(win.mlx_ptr);

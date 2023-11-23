@@ -70,8 +70,8 @@ t_map   *ft_init_map(int maxX, int maxY)
         }
         i++;
     }
-    map->maxX = maxX;
-    map->maxY = maxY;
+    map->sizeX = maxX;
+    map->sizeY = maxY;
     return (map);
 }
 
@@ -80,7 +80,7 @@ void    ft_free_map(t_map *map)
     int i;
 
     i = 0;
-    while (i < map->maxY)
+    while (i < map->sizeY)
     {
         free(map->map[i]);
         i++;

@@ -66,23 +66,23 @@ void    ft_convert_to_map_vector2(t_map *map)
     int         i;
     int         j;
 
-    map_vector2 = (t_vector2 **)malloc(sizeof(t_vector2 *) * map->maxY);
+    map_vector2 = (t_vector2 **)malloc(sizeof(t_vector2 *) * map->sizeY);
     if (map_vector2 == NULL)
     {
         ft_printf("malloc error in ft_make_map_vector2\n");
         exit(0);
     }
     i = 0;
-    while (i < map->maxY)
+    while (i < map->sizeY)
     {
-        map_vector2[i] = (t_vector2 *)malloc(sizeof(t_vector2) * map->maxX);
+        map_vector2[i] = (t_vector2 *)malloc(sizeof(t_vector2) * map->sizeX);
         if (map_vector2[i] == NULL)
         {
             ft_printf("malloc error in ft_make_map_vector2\n");
             exit(0);
         }
         j = 0;
-        while (j < map->maxX)
+        while (j < map->sizeX)
         {
             map_vector2[i][j] = ft_3dto2d(map->map[i][j], map->camera, SCREEN_WIDTH, SCREEN_HEIGHT);
             j++;
@@ -111,19 +111,22 @@ t_map   *ft_get_map_from_file(int fd)
         i++;
     }
     map = ft_init_map(ft_count_words(lines[0], ' '), i);
-    ft_printf("maxX = %d\nmaxY = %d\n", map->maxX, map->maxY);
+    ft_printf("maxX = %d\nmaxY = %d\n", map->sizeX, map->sizeY);
     i = 0;
-    while (lines[i] && i < map->maxY)
+    while (lines[i] && i < map->sizeY)
     {
         positions = ft_split(lines[i], ' ');
         j = 0;
-        while (positions[j] && j < map->maxX)
+        while (positions[j] && j < map->sizeX)
         {
             tz = ft_atoi(positions[j]) + 1;
-            map->map[i][j] = ft_make_vector3(j, tz / 2, i);
+            map->map[i][j] = ft_make_vector3(j, tz, i);
             j++;
         }
         i++;
     }
+    map->camera = ft_make_camera(ft_make_vector3(map->sizeX * 2, map->sizeY * 3, map->sizeX * 2), 7, 0.5, 100);
+    map->refresh_window = ft_refresh_window;
+    ft_convert_to_map_vector2(map);
     return (map);
 }
