@@ -12,6 +12,32 @@
 
 #include "fdf.h"
 
+static int ft_get_color_between_two(int color1, int color2, float t)
+{
+    int r;
+    int g;
+    int b;
+
+    r = (int)((float)((color2 & 0xFF0000) >> 16) * t) + (int)((float)((color1 & 0xFF0000) >> 16) * (1 - t));
+    g = (int)((float)((color2 & 0x00FF00) >> 8) * t) + (int)((float)((color1 & 0x00FF00) >> 8) * (1 - t));
+    b = (int)((float)((color2 & 0x0000FF)) * t) + (int)((float)((color1 & 0x0000FF)) * (1 - t));
+    return ((r << 16) + (g << 8) + b);
+}
+
+/**
+ * @brief Get the color from the y coordinate
+ * @param y
+ * @return int
+ */
+int ft_get_color_from_y(int y, int max_y, int min_y)
+{
+    if (y < min_y)
+        return (HEX_BLUE);
+    if (y > max_y)
+        return (HEX_RED);
+    return (ft_get_color_between_two(HEX_BLUE, HEX_RED, (float)(y - min_y) / (float)(max_y - min_y)));
+}
+
 /**
  * @brief Draw a pixel on an image
  * @param win
@@ -37,23 +63,23 @@ void    ft_draw_pixel(t_win *win, t_vector2 point, int color)
  * @param point1
  * @param point2
  */
-void    ft_draw_line(t_win *win, t_vector2 point1, t_vector2 point2) {
+void    ft_draw_line(t_win *win, t_line line) {
     t_vector2   delta;
     t_vector2   currentPoint;
     int         steps;
     int         i;
     float       t;
 
-    delta.x = point2.x - point1.x;
-    delta.y = point2.y - point1.y;
+    delta.x = line.point2.x - line.point1.x;
+    delta.y = line.point2.y - line.point1.y;
     steps = sqrt(pow(delta.x, 2) + pow(delta.y, 2));
     i = 0;
     while (i < steps)
     {
         t = (float)i / (float)steps;
-        currentPoint.x = point1.x + (delta.x * t);
-        currentPoint.y = point1.y + (delta.y * t);
-        ft_draw_pixel(win, currentPoint, MAP_COLOR);
+        currentPoint.x = line.point1.x + (delta.x * t);
+        currentPoint.y = line.point1.y + (delta.y * t);
+        ft_draw_pixel(win, currentPoint, ft_get_color_between_two(line.point1_color, line.point2_color, t));
         i++;
     }
 }
@@ -77,6 +103,6 @@ void    ft_reset_image(t_win *win)
 void ft_refresh_window(t_win *win, t_map *map)
 {
     ft_reset_image(win);
-    ft_draw_2d_map(map, &map->camera, win);
+    ft_draw_2d_map(map, map->camera, win);
     mlx_put_image_to_window(win->mlx_ptr, win->win_ptr, win->img_ptr, 0, 0);
 }

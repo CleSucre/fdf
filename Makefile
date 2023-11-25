@@ -49,7 +49,7 @@ ${OBJ_PATH}%.o : %.c
 ${NAME}: ${OBJS}
 	make -C ${LIBFT_DIR}
 	make -C ${MLX_DIR}
-	${CC} ${CFLAGS} -o ${NAME} ${OBJS} -L ${LIBFT_DIR} -L ${MLX_DIR} -L ${MLX_DIR} -lft -lmlx -lXext -lX11 -lm
+	${CC} ${CFLAGS} -o ${NAME} ${OBJS} -L ${LIBFT_DIR} -L ${MLX_DIR} -lft -lmlx -lXext -lX11 -lm
 
 all: ${NAME}
 

@@ -44,14 +44,10 @@ static t_vector2 *ft_is_in_frustum(t_vector3 point, t_camera *camera) {
     if (projectedPoint == NULL)
         return (NULL);
 
-    // Check if the point is within the normalized device coordinates
-    if (fabs(point.x) <= 1.0f && fabs(point.y) <= 1.0f) {
-        // Mapping of 2D coordinates to the screen
-        projectedPoint->x = (point.x + 1.0f) * 0.5f * SCREEN_WIDTH;
-        projectedPoint->y = (1.0f - point.y) * 0.5f * SCREEN_HEIGHT;
-        return (projectedPoint);
-    }
-    return (NULL);
+    // Mapping of 2D coordinates to the screen
+    projectedPoint->x = (point.x + 1.0f) * 0.5f * SCREEN_WIDTH;
+    projectedPoint->y = (1.0f - point.y) * 0.5f * SCREEN_HEIGHT;
+    return (projectedPoint);
 }
 /**
  * @brief Draws a line between two points in a 2D window.
@@ -67,7 +63,7 @@ void    ft_draw_2d_map(t_map *map, t_camera *camera, t_win *win)
     t_vector2 *point2;
 
     i = 0;
-    while (i < map->sizeY)
+    while (i < map->sizeZ)
     {
         j = 0;
         while (j < map->sizeX)
@@ -80,13 +76,19 @@ void    ft_draw_2d_map(t_map *map, t_camera *camera, t_win *win)
                     point2 = ft_is_in_frustum(map->map_vector3[i][j + 1], camera);
                     if (point2)
                     {
-                        ft_draw_line(win, *point1, *point2);
+                        ft_draw_line(
+                                win,
+                                ft_make_line(*point1, *point2,
+                                                ft_get_color_from_y(map->map_vector3[i][j].y, map->sizeY, 0),
+                                                ft_get_color_from_y(map->map_vector3[i][j + 1].y, map->sizeY, 0)
+                                )
+                        );
                         free(point2);
                     }
                     free(point1);
                 }
             }
-            if (i + 1 < map->sizeY)
+            if (i + 1 < map->sizeZ)
             {
                 point1 = ft_is_in_frustum(map->map_vector3[i][j], camera);
                 if (point1)
@@ -94,7 +96,13 @@ void    ft_draw_2d_map(t_map *map, t_camera *camera, t_win *win)
                     point2 = ft_is_in_frustum(map->map_vector3[i + 1][j], camera);
                     if (point2)
                     {
-                        ft_draw_line(win, *point1, *point2);
+                        ft_draw_line(
+                                win,
+                                ft_make_line(*point1, *point2,
+                                             ft_get_color_from_y(map->map_vector3[i][j].y, map->sizeY, 0),
+                                             ft_get_color_from_y(map->map_vector3[i + 1][j].y, map->sizeY, 0)
+                                )
+                        );
                         free(point2);
                     }
                     free(point1);
