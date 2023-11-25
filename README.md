@@ -45,7 +45,7 @@ To use the FDF program, follow these steps:
 
 4. Run the program with a provided map file:
    ```bash
-   ./fdf test_maps/42.fdf
+   ./fdf maps/42.fdf
    ```
 
 ## Map Files

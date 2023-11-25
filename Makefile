@@ -22,17 +22,19 @@ endif
 
 NAME		= fdf
 
-SRCS		= main.c ft_fdf.c converter.c ft_actions.c maker.c debuger.c drawer.c
+SRCS		= fdf.c ft_actions.c maker.c drawer.c map_manager.c
 
 OBJ_PATH	= obj${DIRSEP}
 
-OBJ_NAME	= ${SRCS:%.c=%.o}
+SRC_PATH	= src${DIRSEP}
+
+OBJ_NAME	= ${addprefix ${SRC_PATH}, ${SRCS:%.c=%.o}}
 
 OBJS		= ${addprefix ${OBJ_PATH}, ${OBJ_NAME}}
 
 CC			= gcc
 
-HEAD		= .
+HEAD		= src
 
 LIBFT_DIR	= libft
 

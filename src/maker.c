@@ -22,23 +22,16 @@ t_vector3   ft_make_vector3(float x, float y, float z)
     return (vector3);
 }
 
-t_vector2   ft_make_vector2(float x, float y)
-{
-    t_vector2 vector2;
-
-    vector2.x = x;
-    vector2.y = y;
-    return (vector2);
-}
-
 t_camera    ft_make_camera(t_vector3 pos, float yaw, float pitch, float fov)
 {
     t_camera camera;
-    
+
     camera.pos = pos;
     camera.yaw = yaw;
     camera.pitch = pitch;
     camera.fov = fov;
+    camera.near = 0.1;
+    camera.far = 10000;
     return (camera);
 }
 
@@ -50,8 +43,8 @@ t_map   *ft_init_map(int maxX, int maxY)
     map = (t_map *)malloc(sizeof(t_map));
     if (map == NULL)
         return (NULL);
-    map->map = (t_vector3 **)malloc(sizeof(t_vector3 *) * maxY);
-    if (map->map == NULL)
+    map->map_vector3 = (t_vector3 **)malloc(sizeof(t_vector3 *) * maxY);
+    if (map->map_vector3 == NULL)
     {
         free(map);
         return (NULL);
@@ -59,12 +52,12 @@ t_map   *ft_init_map(int maxX, int maxY)
     i = 0;
     while (i < maxY)
     {
-        map->map[i] = (t_vector3 *)malloc(sizeof(t_vector3) * maxX);
-        if (map->map[i] == NULL)
+        map->map_vector3[i] = (t_vector3 *)malloc(sizeof(t_vector3) * maxX);
+        if (map->map_vector3[i] == NULL)
         {
             while (i > 0)
-                free(map->map[--i]);
-            free(map->map);
+                free(map->map_vector3[--i]);
+            free(map->map_vector3);
             free(map);
             return (NULL);
         }
@@ -82,9 +75,9 @@ void    ft_free_map(t_map *map)
     i = 0;
     while (i < map->sizeY)
     {
-        free(map->map[i]);
+        free(map->map_vector3[i]);
         i++;
     }
-    free(map->map);
+    free(map->map_vector3);
     free(map);
 }
