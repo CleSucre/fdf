@@ -1,13 +1,13 @@
 #include "fdf.h"
 
 /**
- * @brief Checks if a point is in the frustum of the camera, and returns its 2D coordinates if it is.
+ * @brief Converts a 3D point to a 2D point.
  *
- * @param point Point to check.
+ * @param point Point to convert.
  * @param camera Camera information.
- * @return t_vector2* Returns the point in 2D if it is in the frustum, NULL otherwise.
+ * @return t_vector2 Converted point.
  */
-static t_vector2 *ft_is_in_frustum(t_vector3 point, t_camera *camera) {
+static t_vector2 ft_3d_to_2d(t_vector3 point, t_camera *camera) {
     // Translation of the point relative to the camera position
     point.x -= camera->pos.x;
     point.y -= camera->pos.y;
@@ -39,14 +39,11 @@ static t_vector2 *ft_is_in_frustum(t_vector3 point, t_camera *camera) {
     point.x /= screenDistance;
     point.y /= screenDistance;
 
-    t_vector2 *projectedPoint;
-    projectedPoint = (t_vector2 *)malloc(sizeof(t_vector2));
-    if (projectedPoint == NULL)
-        return (NULL);
+    t_vector2 projectedPoint;
 
     // Mapping of 2D coordinates to the screen
-    projectedPoint->x = (point.x + 1.0f) * 0.5f * SCREEN_WIDTH;
-    projectedPoint->y = (1.0f - point.y) * 0.5f * SCREEN_HEIGHT;
+    projectedPoint.x = (point.x + 1.0f) * 0.5f * SCREEN_WIDTH;
+    projectedPoint.y = (1.0f - point.y) * 0.5f * SCREEN_HEIGHT;
     return (projectedPoint);
 }
 /**
@@ -62,6 +59,15 @@ void    ft_draw_2d_map(t_map *map, t_camera *camera, t_win *win)
     t_vector2 *point1;
     t_vector2 *point2;
 
+    point1 = (t_vector2 *)malloc(sizeof(t_vector2));
+    if (point1 == NULL)
+        return ;
+    point2 = (t_vector2 *)malloc(sizeof(t_vector2));
+    if (point2 == NULL)
+    {
+        free(point1);
+        return ;
+    }
     i = 0;
     while (i < map->sizeZ)
     {
@@ -70,46 +76,32 @@ void    ft_draw_2d_map(t_map *map, t_camera *camera, t_win *win)
         {
             if (j + 1 < map->sizeX)
             {
-                point1 = ft_is_in_frustum(map->map_vector3[i][j], camera);
-                if (point1)
-                {
-                    point2 = ft_is_in_frustum(map->map_vector3[i][j + 1], camera);
-                    if (point2)
-                    {
-                        ft_draw_line(
-                                win,
-                                ft_make_line(*point1, *point2,
-                                                ft_get_color_from_y(map->map_vector3[i][j].y, map->sizeY, 0),
-                                                ft_get_color_from_y(map->map_vector3[i][j + 1].y, map->sizeY, 0)
-                                )
-                        );
-                        free(point2);
-                    }
-                    free(point1);
-                }
+                *point1 = ft_3d_to_2d(map->map_vector3[i][j], camera);
+                *point2 = ft_3d_to_2d(map->map_vector3[i][j + 1], camera);
+                ft_draw_line(
+                    win,
+                    ft_make_line(*point1, *point2,
+                        ft_get_color_from_y(map->map_vector3[i][j].y, map->sizeY, 0),
+                        ft_get_color_from_y(map->map_vector3[i][j + 1].y, map->sizeY, 0)
+                    )
+                );
             }
             if (i + 1 < map->sizeZ)
             {
-                point1 = ft_is_in_frustum(map->map_vector3[i][j], camera);
-                if (point1)
-                {
-                    point2 = ft_is_in_frustum(map->map_vector3[i + 1][j], camera);
-                    if (point2)
-                    {
-                        ft_draw_line(
-                                win,
-                                ft_make_line(*point1, *point2,
-                                             ft_get_color_from_y(map->map_vector3[i][j].y, map->sizeY, 0),
-                                             ft_get_color_from_y(map->map_vector3[i + 1][j].y, map->sizeY, 0)
-                                )
-                        );
-                        free(point2);
-                    }
-                    free(point1);
-                }
+                *point1 = ft_3d_to_2d(map->map_vector3[i][j], camera);
+                *point2 = ft_3d_to_2d(map->map_vector3[i + 1][j], camera);
+                ft_draw_line(
+                    win,
+                    ft_make_line(*point1, *point2,
+                     ft_get_color_from_y(map->map_vector3[i][j].y, map->sizeY, 0),
+                     ft_get_color_from_y(map->map_vector3[i + 1][j].y, map->sizeY, 0)
+                    )
+                );
             }
             j++;
         }
         i++;
     }
+    free(point1);
+    free(point2);
 }

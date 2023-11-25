@@ -69,13 +69,6 @@ static t_win  ft_init_window(char *filename)
     return (win);
 }
 
-int ft_test(t_key_params *params)
-{
-    (void)params;
-    ft_printf("test\n");
-    return (0);
-}
-
 void    ft_init_keymap(t_win *win, t_map *map)
 {
     t_key_params    *params;
@@ -89,11 +82,7 @@ void    ft_init_keymap(t_win *win, t_map *map)
     params->win = win;
     params->map = map;
 
-    mlx_expose_hook(win->win_ptr, ft_test, params);
-    mlx_key_hook(win->win_ptr, ft_test, params);
-
     mlx_do_key_autorepeaton(win->mlx_ptr);
-    mlx_mouse_hook(win->win_ptr, ft_test, params);
     mlx_mouse_hook(win->win_ptr, action_mouse_key, params);
     mlx_hook(win->win_ptr, 5, BUTTON_RELEASE_MASK, action_mouse_key, params);
 

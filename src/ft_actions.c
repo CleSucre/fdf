@@ -73,7 +73,6 @@ void    ft_move_zoom_out(t_camera *camera, float distance)
 
 int action_key(int keycode, t_key_params *params)
 {
-    ft_printf("keycode: %d\n", keycode);
     if (keycode == KEY_ESC)
     {
         mlx_destroy_window(params->win->mlx_ptr, params->win->win_ptr);
@@ -132,7 +131,6 @@ int action_mouse_key(int button, int x, int y, void *params)
     t_key_params *key_params;
 
     key_params = (t_key_params *)params;
-    ft_printf("mouse button: %d, x: %d, y: %d\n", button, x, y);
     if (button == 1)
     {
         if (key_params->map->camera->mouse->lock)
@@ -161,7 +159,6 @@ int action_mouse_move(int x, int y, void *params)
     t_key_params *key_params;
 
     key_params = (t_key_params *)params;
-    ft_printf("mouse position: x: %d, y: %d\n", x, y);
     if ((key_params->map->camera->mouse->lock))
     {
         //rotate the all map
