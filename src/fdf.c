@@ -95,10 +95,10 @@ int    ft_free_program(t_key_params *params)
 {
     //mlx_destroy_window(params->win->mlx_ptr, params->win->win_ptr);
     ft_free_map(params->map);
-    //free(params->win->mlx_ptr);
+    free(params->win->mlx_ptr);
     //free(params->win->win_ptr);
-    //free(params->win->img_ptr);
-    //free(params);
+    free(params->win->img_ptr);
+    free(params);
     exit(0);
 }
 
