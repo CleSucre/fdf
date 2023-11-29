@@ -121,4 +121,6 @@ void					ft_debug_map(t_map *map);
 void					ft_draw_2d_map(t_map *map, t_camera *camera,
 							t_win *win);
 
+t_vector2				ft_3d_to_2d(t_vector3 point, t_camera *camera);
+
 #endif

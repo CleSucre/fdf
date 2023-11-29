@@ -12,23 +12,14 @@
 
 #include "fdf.h"
 
-/**
- * @brief Generate a map from a file
- * @param fd
- * @return t_map*
- */
-t_map	*ft_get_map_from_file(int fd)
+static t_map	*create_map_from_lines(char **lines)
 {
-	t_map	*map;
-	char	**lines;
-	char	**positions;
 	int		i;
 	int		j;
 	float	tz;
+	t_map	*map;
+	char	**positions;
 
-	lines = get_lines(fd);
-	if (lines == NULL)
-		return (NULL);
 	i = 0;
 	while (lines[i])
 		i++;
@@ -52,57 +43,22 @@ t_map	*ft_get_map_from_file(int fd)
 		i++;
 	}
 	free(lines);
-	map->camera = ft_init_camera(ft_make_vector3(map->size_x * 2, map->size_y
-				* 3, map->size_z * 3));
-	map->refresh_window = ft_refresh_window;
 	return (map);
 }
 
-/**
- * @brief Converts a 3D point to a 2D point.
- *
- * @param point Point to convert.
- * @param camera Camera information.
- * @return t_vector2 Converted point.
- */
-static t_vector2	ft_3d_to_2d(t_vector3 point, t_camera *camera)
+t_map	*ft_get_map_from_file(int fd)
 {
-	float		cos_yaw;
-	float		sin_yaw;
-	float		cos_pitch;
-	float		sin_pitch;
-	float		new_x;
-	float		new_z;
-	float		newY;
-	float		new_z2;
-	float		distance;
-	float		screen_distance;
-	t_vector2	projected_point;
+	char	**lines;
+	t_map	*map;
 
-	point.x -= camera->pos.x;
-	point.y -= camera->pos.y;
-	point.z -= camera->pos.z;
-	cos_yaw = cosf(camera->yaw);
-	sin_yaw = sinf(camera->yaw);
-	cos_pitch = cosf(camera->pitch);
-	sin_pitch = sinf(camera->pitch);
-	new_x = point.x * cos_yaw - point.z * sin_yaw;
-	new_z = point.x * sin_yaw + point.z * cos_yaw;
-	point.x = new_x;
-	point.z = new_z;
-	newY = point.y * cos_pitch - point.z * sin_pitch;
-	new_z2 = point.y * sin_pitch + point.z * cos_pitch;
-	point.y = newY;
-	point.z = new_z2;
-	distance = point.z;
-	point.x /= distance;
-	point.y /= distance;
-	screen_distance = tanf(camera->fov * 0.5f);
-	point.x /= screen_distance;
-	point.y /= screen_distance;
-	projected_point.x = (point.x + 1.0f) * 0.5f * SCREEN_WIDTH;
-	projected_point.y = (1.0f - point.y) * 0.5f * SCREEN_HEIGHT;
-	return (projected_point);
+	lines = get_lines(fd);
+	if (lines == NULL)
+		return (NULL);
+	map = create_map_from_lines(lines);
+	map->camera = ft_init_camera(
+			ft_make_vector3(map->size_x * 2, map->size_y * 3, map->size_z * 3));
+	map->refresh_window = ft_refresh_window;
+	return (map);
 }
 
 /**
