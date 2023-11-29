@@ -59,6 +59,22 @@ t_line	ft_make_line(t_vector2 point1, t_vector2 point2, int point1_color,
 	return (line);
 }
 
+void	*ft_free_map(t_map *map)
+{
+	int	i;
+
+	i = 0;
+	while (i < map->size_z)
+	{
+		free(map->map_vector3[i]);
+		i++;
+	}
+	free(map->map_vector3);
+	free(map->camera);
+	free(map);
+	return (NULL);
+}
+
 t_map	*ft_init_map(int maxX, int maxZ)
 {
 	t_map	*map;
@@ -78,32 +94,11 @@ t_map	*ft_init_map(int maxX, int maxZ)
 	{
 		map->map_vector3[i] = (t_vector3 *)malloc(sizeof(t_vector3) * maxX);
 		if (map->map_vector3[i] == NULL)
-		{
-			while (i > 0)
-				free(map->map_vector3[--i]);
-			free(map->map_vector3);
-			free(map);
-			return (NULL);
-		}
+			return (ft_free_map(map));
 		i++;
 	}
 	map->size_x = maxX;
 	map->size_y = 0;
 	map->size_z = maxZ;
 	return (map);
-}
-
-void	ft_free_map(t_map *map)
-{
-	int	i;
-
-	i = 0;
-	while (i < map->size_z)
-	{
-		free(map->map_vector3[i]);
-		i++;
-	}
-	free(map->map_vector3);
-	free(map->camera);
-	free(map);
 }

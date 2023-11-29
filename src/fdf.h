@@ -70,9 +70,9 @@ typedef struct s_camera
 	t_mouse_info		*mouse;
 }						t_camera;
 
-struct s_map;
+struct			s_map;
 
-typedef void			(*function_pointer)(t_win *, struct s_map *);
+typedef void	(*t_function_pointer)(struct s_win *, struct s_map *);
 
 typedef struct s_map
 {
@@ -81,7 +81,7 @@ typedef struct s_map
 	int					size_y;
 	int					size_z;
 	t_camera			*camera;
-	function_pointer	refresh_window;
+	t_function_pointer	refresh_window;
 }						t_map;
 
 typedef struct s_key_params
@@ -105,7 +105,7 @@ t_camera				*ft_init_camera(t_vector3 pos);
 t_line					ft_make_line(t_vector2 point1, t_vector2 point2,
 							int point1_color, int point2_color);
 t_map					*ft_init_map(int maxX, int maxZ);
-void					ft_free_map(t_map *map);
+void					*ft_free_map(t_map *map);
 
 int						ft_get_color_between_two(int color1, int color2,
 							float t);

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   map_manager.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: julthoma <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/11/29 00:37:03 by julthoma          #+#    #+#             */
+/*   Updated: 2023/11/29 00:37:05 by julthoma         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "fdf.h"
 
 /**
@@ -92,6 +104,7 @@ static t_vector2	ft_3d_to_2d(t_vector3 point, t_camera *camera)
 	projected_point.y = (1.0f - point.y) * 0.5f * SCREEN_HEIGHT;
 	return (projected_point);
 }
+
 /**
  * @brief Draws a line between two points in a 2D window.
  *

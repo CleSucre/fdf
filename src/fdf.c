@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   fdf.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: julthoma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -67,11 +67,14 @@ void	ft_init_keymap(t_win *win, t_map *map)
  */
 int	ft_free_program(t_key_params *params)
 {
-	// mlx_destroy_window(params->win->mlx_ptr, params->win->win_ptr);
-	ft_free_map(params->map);
+	mlx_destroy_image(params->win->mlx_ptr, params->win->img_ptr);
+	mlx_clear_window(params->win->mlx_ptr, params->win->win_ptr);
+	mlx_destroy_window(params->win->mlx_ptr, params->win->win_ptr);
+	mlx_destroy_display(params->win->mlx_ptr);
 	free(params->win->mlx_ptr);
-	free(params->win->win_ptr);
-	free(params->win->img_ptr);
+	free(params->win);
+	free(params->map->camera->mouse);
+	ft_free_map(params->map);
 	free(params);
 	exit(0);
 }
