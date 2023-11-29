@@ -25,12 +25,12 @@ static int	ft_movement_key(int keycode, t_key_params *params)
 		params->map->camera->pos.x += 0.5 * sin(params->map->camera->yaw);
 		params->map->camera->pos.z += 0.5 * cos(params->map->camera->yaw);
 	}
-	else if (keycode == KEY_Q)
+	else if (keycode == KEY_A)
 	{
 		params->map->camera->pos.x -= 0.5 * cos(params->map->camera->yaw);
 		params->map->camera->pos.z += 0.5 * sin(params->map->camera->yaw);
 	}
-	else if (keycode == KEY_Z)
+	else if (keycode == KEY_W)
 	{
 		params->map->camera->pos.x -= 0.5 * sin(params->map->camera->yaw);
 		params->map->camera->pos.z -= 0.5 * cos(params->map->camera->yaw);
@@ -47,7 +47,7 @@ int	action_key(int keycode, t_key_params *params)
 		ft_free_program(params);
 	else if (ft_movement_key(keycode, params))
 		return (0);
-	else if (keycode == KEY_A)
+	else if (keycode == KEY_Q)
 		params->map->camera->pos.y += 1;
 	else if (keycode == KEY_E)
 		params->map->camera->pos.y -= 1;
@@ -59,8 +59,7 @@ int	action_key(int keycode, t_key_params *params)
 		params->map->camera->pitch -= M_PI / 180.0f;
 	else if (keycode == KEY_DOWN)
 		params->map->camera->pitch += M_PI / 180.0f;
-	else
-		return (0);
+	params->map->refresh_window(params->win, params->map);
 	return (0);
 }
 
