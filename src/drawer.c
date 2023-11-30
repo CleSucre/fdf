@@ -81,6 +81,6 @@ void	ft_reset_image(t_win *win)
 void	ft_refresh_window(t_win *win, t_map *map)
 {
 	ft_reset_image(win);
-	ft_draw_2d_map(map, map->camera, win);
+	ft_draw_2d_map(map, win);
 	mlx_put_image_to_window(win->mlx_ptr, win->win_ptr, win->img_ptr, 0, 0);
 }
