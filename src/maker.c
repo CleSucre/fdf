@@ -30,11 +30,15 @@ t_camera	*ft_init_camera(t_vector3 pos)
 	if (camera == NULL)
 		return (NULL);
 	camera->pos = pos;
-	camera->yaw = 0.615472907f;
-	camera->pitch = 0.523599f;
+
+	camera->yaw = atan2f(pos.y, pos.x) * 180 / 3.14159265;
+    float distance = sqrtf(pos.x * pos.x + pos.y * pos.y + pos.z * pos.z);
+	printf("distance %f\n", distance);
+    camera->pitch = -asinf(pos.z / distance) / 3.14159265;
+
 	camera->fov = 100.0f;
-	camera->near = 0.1f;
-	camera->far = 1000.0f;
+	camera->near = 0.0f;
+	camera->far = 0.0f;
 	camera->mouse = (t_mouse_info *)malloc(sizeof(t_mouse_info));
 	if (camera->mouse == NULL)
 	{

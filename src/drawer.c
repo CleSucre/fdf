@@ -81,6 +81,25 @@ void	ft_reset_image(t_win *win)
 void	ft_refresh_window(t_win *win, t_map *map)
 {
 	ft_reset_image(win);
-	ft_draw_2d_map(map, win);
+	ft_draw_2d_map(map, map->camera, win);
 	mlx_put_image_to_window(win->mlx_ptr, win->win_ptr, win->img_ptr, 0, 0);
+
+	//write camera position
+	mlx_string_put(win->mlx_ptr, win->win_ptr, 10, 10, 0xFFFFFF, "Camera position:");
+	mlx_string_put(win->mlx_ptr, win->win_ptr, 10, 30, 0xFFFFFF, "x:");
+	mlx_string_put(win->mlx_ptr, win->win_ptr, 30, 30, 0xFFFFFF,
+		ft_itoa(map->camera->pos.x));
+	mlx_string_put(win->mlx_ptr, win->win_ptr, 10, 50, 0xFFFFFF, "y:");
+	mlx_string_put(win->mlx_ptr, win->win_ptr, 30, 50, 0xFFFFFF,
+		ft_itoa(map->camera->pos.y));
+	mlx_string_put(win->mlx_ptr, win->win_ptr, 10, 70, 0xFFFFFF, "z:");
+	mlx_string_put(win->mlx_ptr, win->win_ptr, 30, 70, 0xFFFFFF,
+		ft_itoa(map->camera->pos.z));
+	//write camera yaw & pitch using ft_itoa
+	mlx_string_put(win->mlx_ptr, win->win_ptr, 10, 90, 0xFFFFFF, "Camera yaw:");
+	mlx_string_put(win->mlx_ptr, win->win_ptr, 100, 90, 0xFFFFFF,
+		ft_dtoa(map->camera->yaw, 5));
+	mlx_string_put(win->mlx_ptr, win->win_ptr, 10, 110, 0xFFFFFF, "Camera pitch:");
+	mlx_string_put(win->mlx_ptr, win->win_ptr, 100, 110, 0xFFFFFF,
+		ft_dtoa(map->camera->pitch, 5));
 }

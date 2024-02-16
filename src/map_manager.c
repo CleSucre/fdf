@@ -55,8 +55,9 @@ t_map	*ft_get_map_from_file(int fd)
 	if (lines == NULL)
 		return (NULL);
 	map = create_map_from_lines(lines);
+	ft_printf("x %d, y %d, z %d\n", map->size_x, map->size_y, map->size_z);
 	map->camera = ft_init_camera(
-			ft_make_vector3(map->size_x * 2, map->size_y * 3, map->size_z * 3));
+			ft_make_vector3(0, 25, 0));
 	map->refresh_window = ft_refresh_window;
 	return (map);
 }
