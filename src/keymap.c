@@ -1,93 +1,65 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   actions.c                                          :+:      :+:    :+:   */
+/*   keymap.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: julthoma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/22 07:26:35 by julthoma          #+#    #+#             */
-/*   Updated: 2023/11/22 07:26:35 by julthoma         ###   ########.fr       */
+/*   Created: 2024/04/24 15:51:50 by julthoma          #+#    #+#             */
+/*   Updated: 2024/04/24 15:51:50 by julthoma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 #include "key_map.h"
 
-static int	ft_movement_key(int keycode, t_key_params *params)
-{
-	if (keycode == KEY_D)
-	{
-		params->map->camera->pos.x += 0.5 * cos(params->map->camera->yaw);
-		params->map->camera->pos.z -= 0.5 * sin(params->map->camera->yaw);
-	}
-	else if (keycode == KEY_S)
-	{
-		params->map->camera->pos.x += 0.5 * sin(params->map->camera->yaw);
-		params->map->camera->pos.z += 0.5 * cos(params->map->camera->yaw);
-	}
-	else if (keycode == KEY_A)
-	{
-		params->map->camera->pos.x -= 0.5 * cos(params->map->camera->yaw);
-		params->map->camera->pos.z += 0.5 * sin(params->map->camera->yaw);
-	}
-	else if (keycode == KEY_W)
-	{
-		params->map->camera->pos.x -= 0.5 * sin(params->map->camera->yaw);
-		params->map->camera->pos.z -= 0.5 * cos(params->map->camera->yaw);
-	}
-	else
-		return (0);
-	params->map->refresh_window(params->win, params->map);
-	return (1);
-}
-
-int	action_key(int keycode, t_key_params *params)
+static int	action_key(int keycode, t_key_params *params)
 {
 	if (keycode == KEY_ESC)
 		ft_free_program(params);
-	else if (ft_movement_key(keycode, params))
-		return (0);
+	else if (keycode == KEY_D)
+		ft_right(params->map);
+	else if (keycode == KEY_S)
+		ft_backward(params->map);
+	else if (keycode == KEY_A)
+		ft_left(params->map);
+	else if (keycode == KEY_W)
+		ft_forward(params->map);
 	else if (keycode == KEY_Q)
-		params->map->camera->pos.y += 1;
+		params->map->camera->position.y += 0.5;
 	else if (keycode == KEY_E)
-		params->map->camera->pos.y -= 1;
-	else if (keycode == KEY_RIGHT)
-		params->map->camera->yaw -= M_PI / 180.0f;
-	else if (keycode == KEY_LEFT)
-		params->map->camera->yaw += M_PI / 180.0f;
-	else if (keycode == KEY_UP)
-		params->map->camera->pitch -= M_PI / 180.0f;
-	else if (keycode == KEY_DOWN)
-		params->map->camera->pitch += M_PI / 180.0f;
-	params->map->refresh_window(params->win, params->map);
-	return (0);
+		params->map->camera->position.y -= 0.5;
+	else
+		return (0);
+	ft_refresh_window(params->win, params->map);
+	return (1);
 }
 
 static int	ft_scroll(int keycode, t_key_params *params)
 {
 	if (keycode == 4)
 	{
-		params->map->camera->pos.x -= sin(params->map->camera->yaw)
+		params->map->camera->position.x -= sin(params->map->camera->yaw)
 			* cos(params->map->camera->pitch);
-		params->map->camera->pos.y -= sin(params->map->camera->pitch);
-		params->map->camera->pos.z -= cos(params->map->camera->yaw)
+		params->map->camera->position.y -= sin(params->map->camera->pitch);
+		params->map->camera->position.z -= cos(params->map->camera->yaw)
 			* cos(params->map->camera->pitch);
 	}
 	else if (keycode == 5)
 	{
-		params->map->camera->pos.x += sin(params->map->camera->yaw)
+		params->map->camera->position.x += sin(params->map->camera->yaw)
 			* cos(params->map->camera->pitch);
-		params->map->camera->pos.y += sin(params->map->camera->pitch);
-		params->map->camera->pos.z += cos(params->map->camera->yaw)
+		params->map->camera->position.y += sin(params->map->camera->pitch);
+		params->map->camera->position.z += cos(params->map->camera->yaw)
 			* cos(params->map->camera->pitch);
 	}
 	else
 		return (0);
-	params->map->refresh_window(params->win, params->map);
+	ft_refresh_window(params->win, params->map);
 	return (1);
 }
 
-int	action_mouse_key(int button, int x, int y, void *params)
+static int	action_mouse_key(int button, int x, int y, void *params)
 {
 	t_key_params	*key_params;
 	t_camera		*camera;
@@ -116,7 +88,7 @@ int	action_mouse_key(int button, int x, int y, void *params)
 	return (0);
 }
 
-int	action_mouse_move(int x, int y, void *params)
+static int	action_mouse_move(int x, int y, void *params)
 {
 	t_key_params	*key_params;
 
@@ -124,9 +96,9 @@ int	action_mouse_move(int x, int y, void *params)
 	if ((key_params->map->camera->mouse->lock))
 	{
 		key_params->map->camera->yaw
-			+= (key_params->map->camera->mouse->last_pos.x - x) * 0.001f;
+			+= (key_params->map->camera->mouse->last_pos.x - x) * 0.001;
 		key_params->map->camera->pitch
-			-= (key_params->map->camera->mouse->last_pos.y - y) * 0.001f;
+			-= (key_params->map->camera->mouse->last_pos.y - y) * 0.001;
 		if (x < 0)
 			mlx_mouse_move(key_params->win->mlx_ptr, key_params->win->win_ptr,
 				0, y);
@@ -138,4 +110,24 @@ int	action_mouse_move(int x, int y, void *params)
 	key_params->map->camera->mouse->last_pos.x = x;
 	key_params->map->camera->mouse->last_pos.y = y;
 	return (0);
+}
+
+void	ft_init_keymap(t_win *win, t_map *map)
+{
+	t_key_params	*params;
+
+	params = (t_key_params *)malloc(sizeof(t_key_params));
+	if (params == NULL)
+	{
+		ft_printf("malloc error in ft_init_keymap\n");
+		exit(0);
+	}
+	params->win = win;
+	params->map = map;
+	mlx_do_key_autorepeaton(win->mlx_ptr);
+	mlx_mouse_hook(win->win_ptr, action_mouse_key, params);
+	mlx_hook(win->win_ptr, 5, 1L << 3, action_mouse_key, params);
+	mlx_hook(win->win_ptr, 2, 1L << 0, action_key, params);
+	mlx_hook(win->win_ptr, 6, 1L << 6, action_mouse_move, params);
+	mlx_hook(win->win_ptr, 17, 1L << 17, ft_free_program, params);
 }

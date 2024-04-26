@@ -22,7 +22,7 @@ endif
 
 NAME		= fdf
 
-SRCS		= fdf.c actions.c maker.c drawer.c map_manager.c color.c trigo.c
+SRCS		= fdf.c map_maker.c maker.c keymap.c destroyer.c drawer.c color_manager.c trigo.c camera.c
 
 OBJ_PATH	= obj${DIRSEP}
 

@@ -22,33 +22,13 @@ t_vector3	ft_make_vector3(float x, float y, float z)
 	return (vector3);
 }
 
-t_camera	*ft_init_camera(t_vector3 pos)
+t_vector2	ft_make_vector2(float x, float y)
 {
-	t_camera	*camera;
+	t_vector2	vector2;
 
-	camera = (t_camera *)malloc(sizeof(t_camera));
-	if (camera == NULL)
-		return (NULL);
-	camera->pos = pos;
-
-	camera->yaw = atan2f(pos.y, pos.x) * 180 / 3.14159265;
-    float distance = sqrtf(pos.x * pos.x + pos.y * pos.y + pos.z * pos.z);
-	printf("distance %f\n", distance);
-    camera->pitch = -asinf(pos.z / distance) / 3.14159265;
-
-	camera->fov = 100.0f;
-	camera->near = 0.0f;
-	camera->far = 0.0f;
-	camera->mouse = (t_mouse_info *)malloc(sizeof(t_mouse_info));
-	if (camera->mouse == NULL)
-	{
-		free(camera);
-		return (NULL);
-	}
-	camera->mouse->lock = 0;
-	camera->mouse->pos_on_lock.x = 0;
-	camera->mouse->pos_on_lock.y = 0;
-	return (camera);
+	vector2.x = x;
+	vector2.y = y;
+	return (vector2);
 }
 
 t_line	ft_make_line(t_vector2 point1, t_vector2 point2, int point1_color,
@@ -63,46 +43,41 @@ t_line	ft_make_line(t_vector2 point1, t_vector2 point2, int point1_color,
 	return (line);
 }
 
-void	*ft_free_map(t_map *map)
+t_camera	*ft_init_camera(t_map *map)
 {
-	int	i;
+	t_camera	*camera;
 
-	i = 0;
-	while (i < map->size_z)
+	camera = (t_camera *)malloc(sizeof(t_camera));
+	if (camera == NULL)
+		return (NULL);
+	camera->position.x = map->size_x / 2.0f;
+	camera->position.y = map->size_y / 2.0f;
+	camera->position.z = map->size_z / 2.0f
+		+ fmaxf(map->size_x, fmaxf(map->size_y, map->size_z));
+	camera->yaw = 0;
+	camera->pitch = 0;
+	camera->fov = 100.0f;
+	camera->mouse = (t_mouse_info *)malloc(sizeof(t_mouse_info));
+	if (camera->mouse == NULL)
 	{
-		free(map->map_vector3[i]);
-		i++;
+		free(camera);
+		return (NULL);
 	}
-	free(map->map_vector3);
-	free(map->camera);
-	free(map);
-	return (NULL);
+	camera->mouse->lock = 0;
+	camera->mouse->pos_on_lock.x = 0;
+	camera->mouse->pos_on_lock.y = 0;
+	return (camera);
 }
 
-t_map	*ft_init_map(int maxX, int maxZ)
+void	ft_create_image(t_win *win)
 {
-	t_map	*map;
-	int		i;
+	int	bpp;
+	int	size_line;
+	int	endian;
 
-	map = (t_map *)malloc(sizeof(t_map));
-	if (map == NULL)
-		return (NULL);
-	map->map_vector3 = (t_vector3 **)malloc(sizeof(t_vector3 *) * maxZ);
-	if (map->map_vector3 == NULL)
-	{
-		free(map);
-		return (NULL);
-	}
-	i = 0;
-	while (i < maxZ)
-	{
-		map->map_vector3[i] = (t_vector3 *)malloc(sizeof(t_vector3) * maxX);
-		if (map->map_vector3[i] == NULL)
-			return (ft_free_map(map));
-		i++;
-	}
-	map->size_x = maxX;
-	map->size_y = 0;
-	map->size_z = maxZ;
-	return (map);
+	win->img_ptr = mlx_new_image(win->mlx_ptr, SCREEN_WIDTH, SCREEN_HEIGHT);
+	win->img_data = mlx_get_data_addr(win->img_ptr, &bpp, &size_line, &endian);
+	win->img_size = SCREEN_WIDTH * SCREEN_HEIGHT * (bpp / 8);
+	win->bpp = bpp;
+	win->size_line = size_line;
 }

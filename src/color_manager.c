@@ -1,24 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   color.c                                            :+:      :+:    :+:   */
+/*   color_manager.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: julthoma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/29 00:36:41 by julthoma          #+#    #+#             */
-/*   Updated: 2023/11/29 00:36:44 by julthoma         ###   ########.fr       */
+/*   Created: 2024/04/24 16:56:17 by julthoma          #+#    #+#             */
+/*   Updated: 2024/04/24 16:56:17 by julthoma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-/**
- * @brief Get the color between two colors depending on t
- * @param color1
- * @param color2
- * @param t
- * @return int
- */
 int	ft_get_color_between_two(int color1, int color2, float t)
 {
 	int	r;
@@ -34,11 +27,6 @@ int	ft_get_color_between_two(int color1, int color2, float t)
 	return ((r << 16) + (g << 8) + b);
 }
 
-/**
- * @brief Get the color from the y coordinate
- * @param y
- * @return int
- */
 int	ft_get_color_from_y(int y, int max_y, int min_y)
 {
 	if (y < min_y)
