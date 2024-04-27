@@ -21,8 +21,8 @@
 # include <time.h>
 
 # define MAP_COLOR HEX_BLUE
-# define SCREEN_WIDTH 500
-# define SCREEN_HEIGHT 500
+# define SCREEN_WIDTH 1000
+# define SCREEN_HEIGHT 1000
 
 # define CAMERA_SIZE 10
 
@@ -82,9 +82,9 @@ typedef struct s_map
 	int					size_y;
 	int					size_z;
 	t_camera			*camera;
-    t_vector2           *point1;
-    t_vector2           *point2;
-    t_line              *line;
+	t_vector2			*point1;
+	t_vector2			*point2;
+	t_line				*line;
 }						t_map;
 
 typedef struct s_key_params
@@ -98,7 +98,8 @@ t_map					*ft_get_map_from_file(int fd);
 
 t_vector3				ft_make_vector3(float x, float y, float z);
 t_vector2				ft_make_vector2(float x, float y);
-t_line					ft_make_line(t_vector2 point1, t_vector2 point2,
+void					ft_make_line(t_line *dst, t_vector2 *point1,
+							t_vector2 *point2,
 							int point1_color, int point2_color);
 t_camera				*ft_init_camera(t_map *map);
 t_map					*ft_init_map(int maxX, int maxZ);
@@ -114,11 +115,12 @@ int						ft_get_color_from_y(int y, int max_y, int min_y);
 
 void					ft_refresh_window(t_win *win, t_map *map);
 
-void                    ft_draw_map(t_map *map, t_win *win);
+void					ft_draw_map(t_map *map, t_win *win);
 
 t_vector3				transform_point(t_vector3 point, t_camera *camera);
-void                    ft_projet_vector3(t_vector2 *dst, t_vector3 point, t_camera *camera);
-int                     ft_check_frustum(t_vector2 point);
+void					ft_projet_vector3(t_vector2 *dst, t_vector3 point,
+							t_camera *camera);
+int						ft_check_frustum(t_vector2 *point);
 
 void					ft_right(t_map *map);
 void					ft_left(t_map *map);

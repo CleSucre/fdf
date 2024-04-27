@@ -49,10 +49,10 @@ static t_map	*create_map_from_lines(char **lines)
 		i++;
 	}
 	free(lines);
-    //TODO: return null in case of malloc failure
-    map->point1 = malloc(sizeof(t_vector2));
-    map->point2 = malloc(sizeof(t_vector2));
-    map->line = malloc(sizeof(t_line));
+	//TODO: return null in case of malloc failure
+	map->point1 = malloc(sizeof(t_vector2));
+	map->point2 = malloc(sizeof(t_vector2));
+	map->line = malloc(sizeof(t_line));
 	return (map);
 }
 
