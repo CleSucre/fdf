@@ -38,8 +38,8 @@ void	*ft_free_map(t_map *map)
 	}
 	free(map->map_vector3);
 	free(map->camera);
-	free(map->point1);
-	free(map->point2);
+	free(map->line->point1);
+	free(map->line->point2);
 	free(map->line);
 	free(map->text);
 	free(map);

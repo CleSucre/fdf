@@ -33,27 +33,27 @@ static void	ft_init_x(t_map *map, int i, char **positions)
 
 static void	ft_alloc_map(t_map *map)
 {
-	map->point1 = malloc(sizeof(t_vector2));
-	if (map->point1 == NULL)
-		return ;
-	map->point2 = malloc(sizeof(t_vector2));
-	if (map->point2 == NULL)
-	{
-		free(map->point1);
-		return ;
-	}
 	map->line = malloc(sizeof(t_line));
 	if (map->line == NULL)
-	{
-		free(map->point1);
-		free(map->point2);
 		return ;
-	}
+    map->line->point1 = malloc(sizeof(t_vector2));
+    if (map->line->point1 == NULL)
+    {
+        free(map->line);
+        return ;
+    }
+    map->line->point2 = malloc(sizeof(t_vector2));
+    if (map->line->point2 == NULL)
+    {
+        free(map->line->point1);
+        free(map->line);
+        return ;
+    }
 	map->text = malloc(sizeof(char) * 9);
 	if (map->text == NULL)
 	{
-		free(map->point1);
-		free(map->point2);
+		free(map->line->point1);
+		free(map->line->point2);
 		free(map->line);
 		return ;
 	}

@@ -13,8 +13,8 @@
 #ifndef FDF_H
 # define FDF_H
 
-# include "../../libft/include/colors.h"
-# include "../../libft/include/libft.h"
+# include "../libft/include/colors.h"
+# include "../libft/include/libft.h"
 # include "../minilibx/mlx.h"
 # include <fcntl.h>
 # include <math.h>
@@ -60,7 +60,6 @@ typedef struct s_line
 
 typedef struct s_mouse_info
 {
-	t_vector2			pos;
 	t_vector2			last_pos;
 	t_vector2			pos_on_lock;
 	int					lock;
@@ -84,8 +83,6 @@ typedef struct s_map
 	t_camera			*camera;
     t_vector3			*transformed_point1;
     t_vector3			*transformed_point2;
-	t_vector2			*point1;
-	t_vector2			*point2;
 	t_line				*line;
 	char				*text;
 }						t_map;
