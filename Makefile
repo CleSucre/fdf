@@ -40,7 +40,7 @@ LIBFT_DIR	= libft
 
 MLX_DIR		= minilibx
 
-CFLAGS		= -I ${HEAD}
+CFLAGS		= -I ${HEAD} -Wall -Wextra -Werror
 
 ${OBJ_PATH}%.o : %.c
 	mkdir -p ${@D} 2> /dev/null || true

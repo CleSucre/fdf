@@ -25,25 +25,25 @@ static void	ft_draw_text(t_win *win, t_map *map, double cpu_time_used)
 	mlx_string_put(win->mlx_ptr, win->win_ptr, 10, 10, 0xFFFFFF,
 		"Camera position:");
 	mlx_string_put(win->mlx_ptr, win->win_ptr, 10, 30, 0xFFFFFF, "x:");
-	mlx_string_put(win->mlx_ptr, win->win_ptr, 30, 30, 0xFFFFFF,
-		ft_itoa(map->camera->position.x));
+	ft_setitoa(map->text, map->camera->position.x);
+	mlx_string_put(win->mlx_ptr, win->win_ptr, 30, 30, 0xFFFFFF, map->text);
 	mlx_string_put(win->mlx_ptr, win->win_ptr, 10, 50, 0xFFFFFF, "y:");
-	mlx_string_put(win->mlx_ptr, win->win_ptr, 30, 50, 0xFFFFFF,
-		ft_itoa(map->camera->position.y));
+	ft_setitoa(map->text, map->camera->position.y);
+	mlx_string_put(win->mlx_ptr, win->win_ptr, 30, 50, 0xFFFFFF, map->text);
 	mlx_string_put(win->mlx_ptr, win->win_ptr, 10, 70, 0xFFFFFF, "z:");
-	mlx_string_put(win->mlx_ptr, win->win_ptr, 30, 70, 0xFFFFFF,
-		ft_itoa(map->camera->position.z));
+	ft_setitoa(map->text, map->camera->position.z);
+	mlx_string_put(win->mlx_ptr, win->win_ptr, 30, 70, 0xFFFFFF, map->text);
 	mlx_string_put(win->mlx_ptr, win->win_ptr, 10, 90, 0xFFFFFF, "Camera yaw:");
-	mlx_string_put(win->mlx_ptr, win->win_ptr, 100, 90, 0xFFFFFF,
-		ft_dtoa(map->camera->yaw, 5));
+	ft_setdtoa(map->text, map->camera->yaw, 5);
+	mlx_string_put(win->mlx_ptr, win->win_ptr, 100, 90, 0xFFFFFF, map->text);
 	mlx_string_put(win->mlx_ptr, win->win_ptr, 10, 110, 0xFFFFFF,
 		"Camera pitch:");
-	mlx_string_put(win->mlx_ptr, win->win_ptr, 100, 110, 0xFFFFFF,
-		ft_dtoa(map->camera->pitch, 5));
+	ft_setdtoa(map->text, map->camera->pitch, 5);
+	mlx_string_put(win->mlx_ptr, win->win_ptr, 100, 110, 0xFFFFFF, map->text);
 	mlx_string_put(win->mlx_ptr, win->win_ptr, 10, 130, 0xFFFFFF,
 		"Refresh speed:");
-	mlx_string_put(win->mlx_ptr, win->win_ptr, 100, 130, 0xFFFFFF,
-		ft_dtoa(cpu_time_used, 6));
+	ft_setdtoa(map->text, cpu_time_used, 6);
+	mlx_string_put(win->mlx_ptr, win->win_ptr, 100, 130, 0xFFFFFF, map->text);
 }
 
 void	ft_draw_line(t_win *win, t_line *line)
@@ -56,10 +56,10 @@ void	ft_draw_line(t_win *win, t_line *line)
 
 	delta.x = line->point2->x - line->point1->x;
 	delta.y = line->point2->y - line->point1->y;
-	if (abs(delta.x) > abs(delta.y))
-		steps = abs(delta.x);
+	if (abs((int)delta.x) > abs((int)delta.y))
+		steps = abs((int)delta.x);
 	else
-		steps = abs(delta.y);
+		steps = abs((int)delta.y);
 	color = ft_get_color_between_two(line->point1_color, line->point2_color, 0);
 	i = 0;
 	while (i <= steps)

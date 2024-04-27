@@ -49,6 +49,14 @@ static void	ft_alloc_map(t_map *map)
 		free(map->point2);
 		return ;
 	}
+	map->text = malloc(sizeof(char) * 9);
+	if (map->text == NULL)
+	{
+		free(map->point1);
+		free(map->point2);
+		free(map->line);
+		return ;
+	}
 }
 
 static t_map	*create_map_from_lines(char **lines)

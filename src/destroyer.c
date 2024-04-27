@@ -41,6 +41,7 @@ void	*ft_free_map(t_map *map)
 	free(map->point1);
 	free(map->point2);
 	free(map->line);
+	free(map->text);
 	free(map);
 	return (NULL);
 }

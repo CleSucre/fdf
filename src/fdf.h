@@ -85,6 +85,7 @@ typedef struct s_map
 	t_vector2			*point1;
 	t_vector2			*point2;
 	t_line				*line;
+	char				*text;
 }						t_map;
 
 typedef struct s_key_params

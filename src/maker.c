@@ -44,7 +44,6 @@ void	ft_create_image(t_win *win)
 	int	size_line;
 	int	endian;
 
-	win->img_ptr = mlx_new_image(win->mlx_ptr, SCREEN_WIDTH, SCREEN_HEIGHT);
 	win->img_data = mlx_get_data_addr(win->img_ptr, &bpp, &size_line, &endian);
 	win->img_size = SCREEN_WIDTH * SCREEN_HEIGHT * (bpp / 8);
 	win->bpp = bpp;
