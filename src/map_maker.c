@@ -31,6 +31,26 @@ static void	ft_init_x(t_map *map, int i, char **positions)
 	}
 }
 
+static void	ft_alloc_map(t_map *map)
+{
+	map->point1 = malloc(sizeof(t_vector2));
+	if (map->point1 == NULL)
+		return ;
+	map->point2 = malloc(sizeof(t_vector2));
+	if (map->point2 == NULL)
+	{
+		free(map->point1);
+		return ;
+	}
+	map->line = malloc(sizeof(t_line));
+	if (map->line == NULL)
+	{
+		free(map->point1);
+		free(map->point2);
+		return ;
+	}
+}
+
 static t_map	*create_map_from_lines(char **lines)
 {
 	int		i;
@@ -49,10 +69,7 @@ static t_map	*create_map_from_lines(char **lines)
 		i++;
 	}
 	free(lines);
-	//TODO: return null in case of malloc failure
-	map->point1 = malloc(sizeof(t_vector2));
-	map->point2 = malloc(sizeof(t_vector2));
-	map->line = malloc(sizeof(t_line));
+	ft_alloc_map(map);
 	return (map);
 }
 

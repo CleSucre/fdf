@@ -52,8 +52,8 @@ typedef struct s_vector3
 
 typedef struct s_line
 {
-	t_vector2			point1;
-	t_vector2			point2;
+	t_vector2			*point1;
+	t_vector2			*point2;
 	int					point1_color;
 	int					point2_color;
 }						t_line;
@@ -98,9 +98,6 @@ t_map					*ft_get_map_from_file(int fd);
 
 t_vector3				ft_make_vector3(float x, float y, float z);
 t_vector2				ft_make_vector2(float x, float y);
-void					ft_make_line(t_line *dst, t_vector2 *point1,
-							t_vector2 *point2,
-							int point1_color, int point2_color);
 t_camera				*ft_init_camera(t_map *map);
 t_map					*ft_init_map(int maxX, int maxZ);
 
@@ -113,6 +110,7 @@ int						ft_get_color_between_two(int color1, int color2,
 							float t);
 int						ft_get_color_from_y(int y, int max_y, int min_y);
 
+void					ft_draw_line(t_win *win, t_line *line);
 void					ft_refresh_window(t_win *win, t_map *map);
 
 void					ft_draw_map(t_map *map, t_win *win);

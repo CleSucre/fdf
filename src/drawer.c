@@ -20,90 +20,6 @@ void	ft_draw_pixel(t_win *win, t_vector2 point, int color)
 					* win->size_line)) = color;
 }
 
-void	ft_draw_line(t_win *win, t_line *line)
-{
-	t_vector2	delta;
-	t_vector2	current_point;
-	int			steps;
-	int			i;
-	int			color;
-
-	delta.x = line->point2.x - line->point1.x;
-	delta.y = line->point2.y - line->point1.y;
-	if (abs(delta.x) > abs(delta.y))
-		steps = abs(delta.x);
-	else
-		steps = abs(delta.y);
-	color = ft_get_color_between_two(line->point1_color, line->point2_color, 0);
-	i = 0;
-	while (i <= steps)
-	{
-		current_point.x = line->point1.x + (delta.x * i) / steps;
-		current_point.y = line->point1.y + (delta.y * i) / steps;
-		ft_draw_pixel(win, current_point, color);
-		i++;
-	}
-}
-
-void	ft_draw_map(t_map *map, t_win *win)
-{
-	int			i;
-	int			j;
-
-	i = 0;
-	while (i < map->size_z)
-	{
-		j = 0;
-		while (j < map->size_x)
-		{
-			if (j + 1 < map->size_x)
-			{
-				if (map->map_vector3[i][j].z >= 0 && map->map_vector3[i][j + 1].z >= 0)
-				{
-					ft_projet_vector3(map->point1, map->map_vector3[i][j], map->camera);
-					if (ft_check_frustum(map->point1))
-					{
-						ft_projet_vector3(map->point2, map->map_vector3[i][j + 1],
-							map->camera);
-						if (ft_check_frustum(map->point1))
-						{
-							ft_make_line(map->line, map->point1, map->point2,
-								ft_get_color_from_y(map->map_vector3[i][j].y,
-									map->size_y, 0),
-								ft_get_color_from_y(map->map_vector3[i][j + 1].y,
-									map->size_y, 0));
-							ft_draw_line(win, map->line);
-						}
-					}
-				}
-			}
-			if (i + 1 < map->size_z)
-			{
-				if (map->map_vector3[i][j].z >= 0 && map->map_vector3[i + 1][j].z >= 0)
-				{
-					ft_projet_vector3(map->point1, map->map_vector3[i][j], map->camera);
-					if (ft_check_frustum(map->point1))
-					{
-						ft_projet_vector3(map->point2, map->map_vector3[i + 1][j],
-							map->camera);
-						if (ft_check_frustum(map->point2))
-						{
-							ft_make_line(map->line, map->point1, map->point2,
-								ft_get_color_from_y(map->map_vector3[i][j].y,
-									map->size_y, 0),
-								ft_get_color_from_y(map->map_vector3[i + 1][j].y,
-									map->size_y, 0));
-							ft_draw_line(win, map->line);
-						}
-					}
-				}
-			}
-			j++;
-		}
-		i++;
-	}
-}
-
 static void	ft_draw_text(t_win *win, t_map *map, double cpu_time_used)
 {
 	mlx_string_put(win->mlx_ptr, win->win_ptr, 10, 10, 0xFFFFFF,
@@ -128,6 +44,31 @@ static void	ft_draw_text(t_win *win, t_map *map, double cpu_time_used)
 		"Refresh speed:");
 	mlx_string_put(win->mlx_ptr, win->win_ptr, 100, 130, 0xFFFFFF,
 		ft_dtoa(cpu_time_used, 6));
+}
+
+void	ft_draw_line(t_win *win, t_line *line)
+{
+	t_vector2	delta;
+	t_vector2	current_point;
+	int			steps;
+	int			i;
+	int			color;
+
+	delta.x = line->point2->x - line->point1->x;
+	delta.y = line->point2->y - line->point1->y;
+	if (abs(delta.x) > abs(delta.y))
+		steps = abs(delta.x);
+	else
+		steps = abs(delta.y);
+	color = ft_get_color_between_two(line->point1_color, line->point2_color, 0);
+	i = 0;
+	while (i <= steps)
+	{
+		current_point.x = line->point1->x + (delta.x * i) / steps;
+		current_point.y = line->point1->y + (delta.y * i) / steps;
+		ft_draw_pixel(win, current_point, color);
+		i++;
+	}
 }
 
 void	ft_refresh_window(t_win *win, t_map *map)
