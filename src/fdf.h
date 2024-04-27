@@ -21,8 +21,8 @@
 # include <time.h>
 
 # define MAP_COLOR HEX_BLUE
-# define SCREEN_WIDTH 500
-# define SCREEN_HEIGHT 500
+# define SCREEN_WIDTH 1000
+# define SCREEN_HEIGHT 1000
 
 # define CAMERA_SIZE 10
 
@@ -82,6 +82,8 @@ typedef struct s_map
 	int					size_y;
 	int					size_z;
 	t_camera			*camera;
+    t_vector3			*transformed_point1;
+    t_vector3			*transformed_point2;
 	t_vector2			*point1;
 	t_vector2			*point2;
 	t_line				*line;
@@ -116,10 +118,9 @@ void					ft_refresh_window(t_win *win, t_map *map);
 
 void					ft_draw_map(t_map *map, t_win *win);
 
-t_vector3				transform_point(t_vector3 point, t_camera *camera);
-void					ft_projet_vector3(t_vector2 *dst, t_vector3 point,
-							t_camera *camera);
-int						ft_check_frustum(t_vector2 *point);
+void					transform_point(t_vector3 *dst, t_vector3 *point, t_camera *camera);
+void					ft_projet_vector3(t_vector2 *dst, t_vector3 *point, t_camera *camera);
+int						ft_check_frustum(t_vector3 *transformed_point);
 
 void					ft_right(t_map *map);
 void					ft_left(t_map *map);

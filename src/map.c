@@ -29,11 +29,14 @@ static void	ft_pregen_horizontal_line(t_map *map, t_win *win, int i, int j)
 		return ;
 	if (map->map_vector3[i][j].z >= 0 && map->map_vector3[i][j + 1].z >= 0)
 	{
-		ft_projet_vector3(map->point1, map->map_vector3[i][j], map->camera);
-		ft_projet_vector3(map->point2, map->map_vector3[i][j + 1], map->camera);
-		if (ft_check_frustum(map->point1))
+        transform_point(map->transformed_point1, &map->map_vector3[i][j], map->camera);
+        transform_point(map->transformed_point2, &map->map_vector3[i][j + 1], map->camera);
+
+		ft_projet_vector3(map->point1, map->transformed_point1, map->camera);
+		ft_projet_vector3(map->point2, map->transformed_point2, map->camera);
+		if (ft_check_frustum(map->transformed_point1))
 			ft_gen_horizontal_line(map, win, i, j);
-		else if (ft_check_frustum(map->point2))
+		else if (ft_check_frustum(map->transformed_point2))
 			ft_gen_horizontal_line(map, win, i, j);
 	}
 }
@@ -55,11 +58,14 @@ static void	ft_pregen_vertical_line(t_map *map, t_win *win, int i, int j)
 		return ;
 	if (map->map_vector3[i][j].z >= 0 && map->map_vector3[i + 1][j].z >= 0)
 	{
-		ft_projet_vector3(map->point1, map->map_vector3[i][j], map->camera);
-		ft_projet_vector3(map->point2, map->map_vector3[i + 1][j], map->camera);
-		if (ft_check_frustum(map->point1))
+        transform_point(map->transformed_point1, &map->map_vector3[i][j], map->camera);
+        transform_point(map->transformed_point2, &map->map_vector3[i][j + 1], map->camera);
+
+		ft_projet_vector3(map->point1, map->transformed_point1, map->camera);
+		ft_projet_vector3(map->point2, map->transformed_point2, map->camera);
+		if (ft_check_frustum(map->transformed_point1))
 			ft_gen_vertical_line(map, win, i, j);
-		else if (ft_check_frustum(map->point2))
+		else if (ft_check_frustum(map->transformed_point2))
 			ft_gen_vertical_line(map, win, i, j);
 	}
 }

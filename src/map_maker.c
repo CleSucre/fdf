@@ -67,16 +67,24 @@ static t_map	*create_map_from_lines(char **lines)
 
 	i = ft_strlentab((const char **)lines);
 	map = ft_init_map(ft_count_words(lines[0], " "), i);
-	i = 0;
-	while (lines[i] && i < map->size_z)
+	i = -1;
+	while (lines[i] && ++i < map->size_z)
 	{
 		positions = ft_split(lines[i], " ");
 		ft_init_x(map, i, positions);
 		free(positions);
 		free(lines[i]);
-		i++;
 	}
 	free(lines);
+    map->transformed_point1 = malloc(sizeof(t_vector3));
+    if (map->transformed_point1 == NULL)
+        return (ft_free_map(map));
+    map->transformed_point2 = malloc(sizeof(t_vector3));
+    if (map->transformed_point2 == NULL)
+    {
+        free(map->transformed_point1);
+        return (ft_free_map(map));
+    }
 	ft_alloc_map(map);
 	return (map);
 }

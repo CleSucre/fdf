@@ -12,7 +12,7 @@
 
 #include "fdf.h"
 
-t_vector3	transform_point(t_vector3 point, t_camera *camera)
+void	transform_point(t_vector3 *dst, t_vector3 *point, t_camera *camera)
 {
 	float	cos_yaw;
 	float	sin_yaw;
@@ -20,46 +20,41 @@ t_vector3	transform_point(t_vector3 point, t_camera *camera)
 	float	cos_pitch;
 	float	sin_pitch;
 
-	point.x -= camera->position.x;
-	point.y -= camera->position.y;
-	point.z -= camera->position.z;
+	dst->x = point->x - camera->position.x;
+	dst->y = point->y - camera->position.y;
+	dst->z = point->z - camera->position.z;
 	cos_yaw = cosf(camera->yaw);
 	sin_yaw = sinf(camera->yaw);
-	temp = point.x * cos_yaw - point.z * sin_yaw;
-	point.z = point.x * sin_yaw + point.z * cos_yaw;
-	point.x = temp;
+	temp = dst->x * cos_yaw - dst->z * sin_yaw;
+	dst->z = dst->x * sin_yaw + dst->z * cos_yaw;
+	dst->x = temp;
 	cos_pitch = cosf(camera->pitch);
 	sin_pitch = sinf(camera->pitch);
-	temp = point.y * cos_pitch - point.z * sin_pitch;
-	point.z = point.y * sin_pitch + point.z * cos_pitch;
-	point.x /= point.z;
-	point.y = temp / point.z;
-	return (point);
+	temp = dst->y * cos_pitch - dst->z * sin_pitch;
+	dst->z = dst->y * sin_pitch + dst->z * cos_pitch;
+	dst->x /= dst->z;
+	dst->y = temp / dst->z;
 }
 
-static t_vector2	project_point(t_vector3 point, t_camera *camera)
+static void	project_point(t_vector2 *dst, t_vector3 *point, t_camera *camera)
 {
 	float		screen_distance;
-	t_vector2	projected_point;
 
 	screen_distance = tanf(camera->fov * 0.5f);
-	projected_point.x = (point.x / screen_distance + 1.0f)
+	dst->x = (point->x / screen_distance + 1.0f)
 		* 0.5f * SCREEN_WIDTH;
-	projected_point.y = (1.0f - point.y / screen_distance)
+	dst->y = (1.0f - point->y / screen_distance)
 		* 0.5f * SCREEN_HEIGHT;
-	return (projected_point);
 }
 
-void	ft_projet_vector3(t_vector2 *dst, t_vector3 point, t_camera *camera)
+void	ft_projet_vector3(t_vector2 *dst, t_vector3 *point, t_camera *camera)
 {
-	point = transform_point(point, camera);
-	*dst = project_point(point, camera);
+	project_point(dst, point, camera);
 }
 
-int	ft_check_frustum(t_vector2 *point)
+int	ft_check_frustum(t_vector3 *transformed_point)
 {
-	if (point->x < 0 || point->x >= SCREEN_WIDTH
-		|| point->y < 0 || point->y >= SCREEN_HEIGHT)
-		return (0);
-	return (1);
+    if (transformed_point->z > 0)
+        return (0);
+    return (1);
 }
