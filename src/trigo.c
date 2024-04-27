@@ -50,8 +50,16 @@ static t_vector2	project_point(t_vector3 point, t_camera *camera)
 	return (projected_point);
 }
 
-t_vector2	ft_projet_vector3(t_vector3 point, t_camera *camera)
+void	ft_projet_vector3(t_vector2 *dst, t_vector3 point, t_camera *camera)
 {
 	point = transform_point(point, camera);
-	return (project_point(point, camera));
+	*dst = project_point(point, camera);
+}
+
+int ft_check_frustum(t_vector2 point)
+{
+    if (point.x < 0 || point.x >= SCREEN_WIDTH
+        || point.y < 0 || point.y >= SCREEN_HEIGHT)
+        return (0);
+    return (1);
 }

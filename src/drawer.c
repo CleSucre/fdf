@@ -49,9 +49,6 @@ void	ft_draw_map(t_map *map, t_win *win)
 {
 	int			i;
 	int			j;
-	t_vector2	point1;
-	t_vector2	point2;
-	t_line		line;
 
 	i = 0;
 	while (i < map->size_z)
@@ -61,28 +58,46 @@ void	ft_draw_map(t_map *map, t_win *win)
 		{
 			if (j + 1 < map->size_x)
 			{
-				point1 = ft_projet_vector3(map->map_vector3[i][j], map->camera);
-				point2 = ft_projet_vector3(map->map_vector3[i][j + 1],
-						map->camera);
-				line = ft_make_line(point1, point2,
-						ft_get_color_from_y(map->map_vector3[i][j].y,
-							map->size_y, 0),
-						ft_get_color_from_y(map->map_vector3[i][j + 1].y,
-							map->size_y, 0));
-				ft_draw_line(win, line);
+                if (map->map_vector3[i][j].z >= 0 && map->map_vector3[i][j + 1].z >= 0)
+                {
+				    ft_projet_vector3(map->point1, map->map_vector3[i][j], map->camera);
+				    if (ft_check_frustum(*map->point1))
+                    {
+                        ft_projet_vector3(map->point2, map->map_vector3[i][j + 1],
+				        		map->camera);
+                        if (ft_check_frustum(*map->point1))
+                        {
+                            *map->line = ft_make_line(*map->point1, *map->point2,
+					        	ft_get_color_from_y(map->map_vector3[i][j].y,
+					        		map->size_y, 0),
+					        	ft_get_color_from_y(map->map_vector3[i][j + 1].y,
+					        		map->size_y, 0));
+				            ft_draw_line(win, *map->line);
+                        }
+                    }
+                }
 			}
 			if (i + 1 < map->size_z)
 			{
-				point1
-					= ft_projet_vector3(map->map_vector3[i][j], map->camera);
-				point2 = ft_projet_vector3(map->map_vector3[i + 1][j],
-						map->camera);
-				line = ft_make_line(point1, point2,
-						ft_get_color_from_y(map->map_vector3[i][j].y,
-							map->size_y, 0),
-						ft_get_color_from_y(map->map_vector3[i + 1][j].y,
-							map->size_y, 0));
-				ft_draw_line(win, line);
+                if (map->map_vector3[i][j].z >= 0 && map->map_vector3[i + 1][j].z >= 0)
+                {
+				    *map->point1
+				    	= ft_projet_vector3(map->map_vector3[i][j], map->camera);
+				    if (ft_check_frustum(*map->point1))
+                    {
+                        *map->point2 = ft_projet_vector3(map->map_vector3[i + 1][j],
+                                                   map->camera);
+                        if (ft_check_frustum(*map->point2))
+                        {
+                            *map->line = ft_make_line(*map->point1, *map->point2,
+                                    ft_get_color_from_y(map->map_vector3[i][j].y,
+                                        map->size_y, 0),
+                                    ft_get_color_from_y(map->map_vector3[i + 1][j].y,
+                                        map->size_y, 0));
+                            ft_draw_line(win, *map->line);
+                        }
+                    }
+                }
 			}
 			j++;
 		}
@@ -122,7 +137,7 @@ void	ft_refresh_window(t_win *win, t_map *map)
 
 	start = clock();
 	ft_reset_image(win);
-	ft_draw_map(map, win);
+    ft_draw_map(map, win);
 	mlx_put_image_to_window(win->mlx_ptr, win->win_ptr, win->img_ptr, 0, 0);
 	ft_draw_text(win, map, ((double)(clock() - start)) / CLOCKS_PER_SEC);
 }

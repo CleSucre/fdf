@@ -82,6 +82,9 @@ typedef struct s_map
 	int					size_y;
 	int					size_z;
 	t_camera			*camera;
+    t_vector2           *point1;
+    t_vector2           *point2;
+    t_line              *line;
 }						t_map;
 
 typedef struct s_key_params
@@ -111,10 +114,11 @@ int						ft_get_color_from_y(int y, int max_y, int min_y);
 
 void					ft_refresh_window(t_win *win, t_map *map);
 
-void					ft_draw_map(t_map *map, t_win *win);
+void                    ft_draw_map(t_map *map, t_win *win);
 
-t_vector2				ft_projet_vector3(t_vector3 point, t_camera *camera);
 t_vector3				transform_point(t_vector3 point, t_camera *camera);
+void                    ft_projet_vector3(t_vector2 *dst, t_vector3 point, t_camera *camera);
+int                     ft_check_frustum(t_vector2 point);
 
 void					ft_right(t_map *map);
 void					ft_left(t_map *map);
