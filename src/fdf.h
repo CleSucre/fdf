@@ -21,8 +21,8 @@
 # include <time.h>
 
 # define MAP_COLOR HEX_BLUE
-# define SCREEN_WIDTH 1000
-# define SCREEN_HEIGHT 1000
+# define SCREEN_WIDTH 500
+# define SCREEN_HEIGHT 500
 
 # define CAMERA_SIZE 10
 
