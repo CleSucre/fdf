@@ -1,6 +1,9 @@
 # Visual Studio Code
 /.vscode
 
+# Clion
+/.idea
+
 # Compiled files
 .out
 .o
