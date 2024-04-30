@@ -35,8 +35,8 @@ typedef struct s_win
 	int					img_size;
 	int					bpp;
 	int					size_line;
-    int					gen_count;
-    double				last_refresh;
+	int					gen_count;
+	double				last_refresh;
 }						t_win;
 
 typedef struct s_vector2
@@ -81,10 +81,10 @@ typedef struct s_map
 	t_vector3			**map_vector3;
 	int					size_x;
 	int					size_y;
-    int					size_z;
+	int					size_z;
 	t_camera			*camera;
-    t_vector3			*transformed_point1;
-    t_vector3			*transformed_point2;
+	t_vector3			*transformed_point1;
+	t_vector3			*transformed_point2;
 	t_line				*line;
 	char				*text;
 }						t_map;
@@ -101,7 +101,6 @@ t_map					*ft_get_map_from_file(int fd);
 t_vector3				ft_make_vector3(float x, float y, float z);
 t_vector2				ft_make_vector2(float x, float y);
 t_camera				*ft_init_camera(t_map *map);
-t_map					*ft_init_map(int maxX, int maxZ);
 
 int						ft_free_program(t_key_params *params);
 void					*ft_free_map(t_map *map);
@@ -117,8 +116,10 @@ void					ft_refresh_window(t_win *win, t_map *map);
 
 void					ft_draw_map(t_map *map, t_win *win);
 
-void					transform_point(t_vector3 *dst, t_vector3 *point, t_camera *camera);
-void					ft_projet_vector3(t_vector2 *dst, t_vector3 *point, t_camera *camera);
+void					transform_point(t_vector3 *dst, t_vector3 *point,
+							t_camera *camera);
+void					ft_projet_vector3(t_vector2 *dst, t_vector3 *point,
+							t_camera *camera);
 int						ft_check_frustum(t_vector3 *transformed_point);
 
 void					ft_right(t_map *map);

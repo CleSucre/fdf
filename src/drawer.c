@@ -20,7 +20,7 @@ void	ft_draw_pixel(t_win *win, t_vector2 point, int color)
 					* win->size_line)) = color;
 }
 
-static void	ft_draw_text(t_win *win, t_map *map, double cpu_time_used)
+static void	ft_draw_text_2(t_win *win, t_map *map)
 {
 	mlx_string_put(win->mlx_ptr, win->win_ptr, 10, 10, 0xFFFFFF,
 		"Camera position:");
@@ -40,14 +40,19 @@ static void	ft_draw_text(t_win *win, t_map *map, double cpu_time_used)
 		"Camera pitch:");
 	ft_setdtoa(map->text, map->camera->pitch, 5);
 	mlx_string_put(win->mlx_ptr, win->win_ptr, 150, 110, 0xFFFFFF, map->text);
+}
+
+static void	ft_draw_text(t_win *win, t_map *map, double cpu_time_used)
+{
+	ft_draw_text_2(win, map);
 	mlx_string_put(win->mlx_ptr, win->win_ptr, 10, 130, 0xFFFFFF,
 		"CPU refresh speed:");
 	ft_setdtoa(map->text, cpu_time_used, 6);
 	mlx_string_put(win->mlx_ptr, win->win_ptr, 150, 130, 0xFFFFFF, map->text);
-    mlx_string_put(win->mlx_ptr, win->win_ptr, 10, 150, 0xFFFFFF,
-                           "Generation count:");
-    ft_setitoa(map->text, win->gen_count);
-    mlx_string_put(win->mlx_ptr, win->win_ptr, 150, 150, 0xFFFFFF, map->text);
+	mlx_string_put(win->mlx_ptr, win->win_ptr, 10, 150, 0xFFFFFF,
+		"Generation count:");
+	ft_setitoa(map->text, win->gen_count);
+	mlx_string_put(win->mlx_ptr, win->win_ptr, 150, 150, 0xFFFFFF, map->text);
 }
 
 void	ft_draw_line(t_win *win, t_line *line)
@@ -77,19 +82,18 @@ void	ft_draw_line(t_win *win, t_line *line)
 
 void	ft_refresh_window(t_win *win, t_map *map)
 {
-    clock_t current_time;
-    double time_difference;
+	clock_t	current_time;
+	double	time_difference;
 
-    current_time = clock();
-
-    time_difference = ((double)(current_time - win->last_refresh)) / CLOCKS_PER_SEC;
-    if (time_difference <  0.00005)
-        return ;
-
-    win->gen_count++;
+	current_time = clock();
+	time_difference = ((double)(current_time - win->last_refresh))
+		/ CLOCKS_PER_SEC;
+	if (time_difference < 0.000025)
+		return ;
+	win->gen_count++;
 	ft_reset_image(win);
 	ft_draw_map(map, win);
 	mlx_put_image_to_window(win->mlx_ptr, win->win_ptr, win->img_ptr, 0, 0);
 	ft_draw_text(win, map, ((double)(clock() - current_time)) / CLOCKS_PER_SEC);
-    win->last_refresh = clock();
+	win->last_refresh = clock();
 }

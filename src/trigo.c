@@ -54,7 +54,7 @@ void	ft_projet_vector3(t_vector2 *dst, t_vector3 *point, t_camera *camera)
 
 int	ft_check_frustum(t_vector3 *transformed_point)
 {
-    if (transformed_point->z > 0)
-        return (0);
-    return (1);
+	if (transformed_point->z > 0)
+		return (0);
+	return (1);
 }

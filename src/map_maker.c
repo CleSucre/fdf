@@ -29,6 +29,7 @@ static void	ft_init_x(t_map *map, int i, char **positions)
 		free(positions[j]);
 		j++;
 	}
+	free(positions);
 }
 
 static void	ft_alloc_map(t_map *map)
@@ -36,19 +37,19 @@ static void	ft_alloc_map(t_map *map)
 	map->line = malloc(sizeof(t_line));
 	if (map->line == NULL)
 		return ;
-    map->line->point1 = malloc(sizeof(t_vector2));
-    if (map->line->point1 == NULL)
-    {
-        free(map->line);
-        return ;
-    }
-    map->line->point2 = malloc(sizeof(t_vector2));
-    if (map->line->point2 == NULL)
-    {
-        free(map->line->point1);
-        free(map->line);
-        return ;
-    }
+	map->line->point1 = malloc(sizeof(t_vector2));
+	if (map->line->point1 == NULL)
+	{
+		free(map->line);
+		return ;
+	}
+	map->line->point2 = malloc(sizeof(t_vector2));
+	if (map->line->point2 == NULL)
+	{
+		free(map->line->point1);
+		free(map->line);
+		return ;
+	}
 	map->text = malloc(sizeof(char) * 9);
 	if (map->text == NULL)
 	{
@@ -59,50 +60,7 @@ static void	ft_alloc_map(t_map *map)
 	}
 }
 
-static t_map	*create_map_from_lines(char **lines)
-{
-	int		i;
-	t_map	*map;
-	char	**positions;
-
-	i = ft_strlentab((const char **)lines);
-	map = ft_init_map(ft_count_words(lines[0], " "), i);
-	i = -1;
-	while (lines[i] && ++i < map->size_z)
-	{
-		positions = ft_split(lines[i], " ");
-		ft_init_x(map, i, positions);
-		free(positions);
-		free(lines[i]);
-	}
-	free(lines);
-    map->transformed_point1 = malloc(sizeof(t_vector3));
-    if (map->transformed_point1 == NULL)
-        return (ft_free_map(map));
-    map->transformed_point2 = malloc(sizeof(t_vector3));
-    if (map->transformed_point2 == NULL)
-    {
-        free(map->transformed_point1);
-        return (ft_free_map(map));
-    }
-	ft_alloc_map(map);
-	return (map);
-}
-
-t_map	*ft_get_map_from_file(int fd)
-{
-	char	**lines;
-	t_map	*map;
-
-	lines = get_lines(fd);
-	if (lines == NULL)
-		return (NULL);
-	map = create_map_from_lines(lines);
-	map->camera = ft_init_camera(map);
-	return (map);
-}
-
-t_map	*ft_init_map(int maxX, int maxZ)
+static t_map	*ft_init_map(int maxX, int maxZ)
 {
 	t_map	*map;
 	int		i;
@@ -127,5 +85,47 @@ t_map	*ft_init_map(int maxX, int maxZ)
 	map->size_x = maxX;
 	map->size_y = 0;
 	map->size_z = maxZ;
+	return (map);
+}
+
+static t_map	*create_map_from_lines(char **lines)
+{
+	int		i;
+	t_map	*map;
+	char	**positions;
+
+	i = ft_strlentab((const char **)lines);
+	map = ft_init_map(ft_count_words(lines[0], " "), i);
+	i = -1;
+	while (lines[i] && ++i < map->size_z)
+	{
+		positions = ft_split(lines[i], " ");
+		ft_init_x(map, i, positions);
+		free(lines[i]);
+	}
+	free(lines);
+	map->transformed_point1 = malloc(sizeof(t_vector3));
+	if (map->transformed_point1 == NULL)
+		return (ft_free_map(map));
+	map->transformed_point2 = malloc(sizeof(t_vector3));
+	if (map->transformed_point2 == NULL)
+	{
+		free(map->transformed_point1);
+		return (ft_free_map(map));
+	}
+	ft_alloc_map(map);
+	return (map);
+}
+
+t_map	*ft_get_map_from_file(int fd)
+{
+	char	**lines;
+	t_map	*map;
+
+	lines = get_lines(fd);
+	if (lines == NULL)
+		return (NULL);
+	map = create_map_from_lines(lines);
+	map->camera = ft_init_camera(map);
 	return (map);
 }
