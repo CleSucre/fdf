@@ -23,7 +23,7 @@
 # define MAP_COLOR HEX_BLUE
 # define SCREEN_WIDTH 1000
 # define SCREEN_HEIGHT 1000
-
+# define MAX_REFRESH_PER_SECOND 30
 # define CAMERA_SIZE 10
 
 typedef struct s_win
@@ -35,6 +35,8 @@ typedef struct s_win
 	int					img_size;
 	int					bpp;
 	int					size_line;
+    int					gen_count;
+    double				last_refresh;
 }						t_win;
 
 typedef struct s_vector2
@@ -79,7 +81,7 @@ typedef struct s_map
 	t_vector3			**map_vector3;
 	int					size_x;
 	int					size_y;
-	int					size_z;
+    int					size_z;
 	t_camera			*camera;
     t_vector3			*transformed_point1;
     t_vector3			*transformed_point2;

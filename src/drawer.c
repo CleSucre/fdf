@@ -35,15 +35,19 @@ static void	ft_draw_text(t_win *win, t_map *map, double cpu_time_used)
 	mlx_string_put(win->mlx_ptr, win->win_ptr, 30, 70, 0xFFFFFF, map->text);
 	mlx_string_put(win->mlx_ptr, win->win_ptr, 10, 90, 0xFFFFFF, "Camera yaw:");
 	ft_setdtoa(map->text, map->camera->yaw, 5);
-	mlx_string_put(win->mlx_ptr, win->win_ptr, 100, 90, 0xFFFFFF, map->text);
+	mlx_string_put(win->mlx_ptr, win->win_ptr, 150, 90, 0xFFFFFF, map->text);
 	mlx_string_put(win->mlx_ptr, win->win_ptr, 10, 110, 0xFFFFFF,
 		"Camera pitch:");
 	ft_setdtoa(map->text, map->camera->pitch, 5);
-	mlx_string_put(win->mlx_ptr, win->win_ptr, 100, 110, 0xFFFFFF, map->text);
+	mlx_string_put(win->mlx_ptr, win->win_ptr, 150, 110, 0xFFFFFF, map->text);
 	mlx_string_put(win->mlx_ptr, win->win_ptr, 10, 130, 0xFFFFFF,
-		"Refresh speed:");
+		"CPU refresh speed:");
 	ft_setdtoa(map->text, cpu_time_used, 6);
-	mlx_string_put(win->mlx_ptr, win->win_ptr, 100, 130, 0xFFFFFF, map->text);
+	mlx_string_put(win->mlx_ptr, win->win_ptr, 150, 130, 0xFFFFFF, map->text);
+    mlx_string_put(win->mlx_ptr, win->win_ptr, 10, 150, 0xFFFFFF,
+                           "Generation count:");
+    ft_setitoa(map->text, win->gen_count);
+    mlx_string_put(win->mlx_ptr, win->win_ptr, 150, 150, 0xFFFFFF, map->text);
 }
 
 void	ft_draw_line(t_win *win, t_line *line)
@@ -73,11 +77,19 @@ void	ft_draw_line(t_win *win, t_line *line)
 
 void	ft_refresh_window(t_win *win, t_map *map)
 {
-	clock_t	start;
+    clock_t current_time;
+    double time_difference;
 
-	start = clock();
+    current_time = clock();
+
+    time_difference = ((double)(current_time - win->last_refresh)) / CLOCKS_PER_SEC;
+    if (time_difference <  0.00005)
+        return ;
+
+    win->gen_count++;
 	ft_reset_image(win);
 	ft_draw_map(map, win);
 	mlx_put_image_to_window(win->mlx_ptr, win->win_ptr, win->img_ptr, 0, 0);
-	ft_draw_text(win, map, ((double)(clock() - start)) / CLOCKS_PER_SEC);
+	ft_draw_text(win, map, ((double)(clock() - current_time)) / CLOCKS_PER_SEC);
+    win->last_refresh = clock();
 }

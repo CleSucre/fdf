@@ -48,4 +48,6 @@ void	ft_create_image(t_win *win)
 	win->img_size = SCREEN_WIDTH * SCREEN_HEIGHT * (bpp / 8);
 	win->bpp = bpp;
 	win->size_line = size_line;
+    win->gen_count = 0;
+    win->last_refresh = clock();
 }
