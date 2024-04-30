@@ -46,8 +46,8 @@ static void	ft_draw_text(t_win *win, t_map *map, double cpu_time_used)
 {
 	ft_draw_text_2(win, map);
 	mlx_string_put(win->mlx_ptr, win->win_ptr, 10, 130, 0xFFFFFF,
-		"CPU refresh speed:");
-	ft_setdtoa(map->text, cpu_time_used, 6);
+		"Generation speed (ms):");
+	ft_setdtoa(map->text, cpu_time_used, 3);
 	mlx_string_put(win->mlx_ptr, win->win_ptr, 150, 130, 0xFFFFFF, map->text);
 	mlx_string_put(win->mlx_ptr, win->win_ptr, 10, 150, 0xFFFFFF,
 		"Generation count:");
@@ -88,7 +88,7 @@ void	ft_refresh_window(t_win *win, t_map *map)
 	current_time = clock();
 	time_difference = ((double)(current_time - win->last_refresh))
 		/ CLOCKS_PER_SEC;
-	if (time_difference < 0.000025)
+	if (time_difference < 0.00002)
 		return ;
 	win->gen_count++;
 	ft_reset_image(win);
