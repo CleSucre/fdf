@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   maker.c                                            :+:      :+:    :+:   */
+/*   maker_bonus.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: julthoma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/22 14:47:42 by julthoma          #+#    #+#             */
-/*   Updated: 2023/11/22 14:47:42 by julthoma         ###   ########.fr       */
+/*   Updated: 2024/05/01 02:09:31 by julthoma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "fdf.h"
+#include "fdf_bonus.h"
 
 t_camera	*ft_init_camera(t_map *map)
 {
@@ -49,5 +49,5 @@ void	ft_create_image(t_win *win)
 	win->bpp = bpp;
 	win->size_line = size_line;
 	win->gen_count = 0;
-	win->last_refresh = clock();
+	win->last_refresh = 1;
 }

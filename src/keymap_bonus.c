@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   keymap.c                                           :+:      :+:    :+:   */
+/*   keymap_bonus.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: julthoma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 15:51:50 by julthoma          #+#    #+#             */
-/*   Updated: 2024/04/24 15:51:50 by julthoma         ###   ########.fr       */
+/*   Updated: 2024/05/01 02:09:27 by julthoma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "fdf.h"
-#include "key_map.h"
+#include "fdf_bonus.h"
+#include "key_map_bonus.h"
 
 static int	action_key(int keycode, t_key_params *params)
 {

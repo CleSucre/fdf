@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   color_manager.c                                    :+:      :+:    :+:   */
+/*   color_manager_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: julthoma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 16:56:17 by julthoma          #+#    #+#             */
-/*   Updated: 2024/04/24 16:56:17 by julthoma         ###   ########.fr       */
+/*   Updated: 2024/05/01 02:09:13 by julthoma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "fdf.h"
+#include "fdf_bonus.h"
 
 int	ft_get_color_between_two(int color1, int color2, float t)
 {
