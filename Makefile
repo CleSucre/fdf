@@ -22,9 +22,9 @@ endif
 
 NAME		= fdf
 
-SRCS		= fdf.c
+SRCS		= drawer.c fdf.c keymap.c map.c map_maker.c trigo.c color_manager.c destroyer.c
 
-SRCS_BONUS	= fdf_bonus.c map_maker_bonus.c maker_bonus.c keymap_bonus.c destroyer_bonus.c drawer_bonus.c color_manager_bonus.c trigo_bonus.c camera_bonus.c map_bonus.c
+SRCS_BONUS	= bonus/fdf_bonus.c bonus/map_maker_bonus.c bonus/maker_bonus.c bonus/keymap_bonus.c bonus/destroyer_bonus.c bonus/drawer_bonus.c bonus/color_manager_bonus.c bonus/trigo_bonus.c bonus/camera_bonus.c bonus/map_bonus.c
 
 OBJ_PATH	= obj${DIRSEP}
 

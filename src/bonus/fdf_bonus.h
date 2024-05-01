@@ -13,18 +13,15 @@
 #ifndef FDF_BONUS_H
 # define FDF_BONUS_H
 
-# include "../libft/include/colors.h"
-# include "../libft/include/libft.h"
-# include "../minilibx/mlx.h"
+# include "../../libft/include/colors.h"
+# include "../../libft/include/libft.h"
+# include "../../minilibx/mlx.h"
 # include <fcntl.h>
 # include <math.h>
 # include <time.h>
 
-# define MAP_COLOR HEX_BLUE
 # define SCREEN_WIDTH 1000
 # define SCREEN_HEIGHT 1000
-# define MAX_REFRESH_PER_SECOND 30
-# define CAMERA_SIZE 10
 
 typedef struct s_win
 {
