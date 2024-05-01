@@ -19,11 +19,11 @@ t_camera	*ft_init_camera(t_map *map)
 	camera = (t_camera *)malloc(sizeof(t_camera));
 	if (camera == NULL)
 		return (NULL);
-	camera->position.x = map->size_x / 2;
-	camera->position.y = map->size_y + (map->size_z * 0.75);
-	camera->position.z = map->size_z * 1.5;
-	camera->yaw = 0;
-	camera->pitch = 0.45;
+	camera->position.x = map->size_x * 0.90;
+	camera->position.y = map->size_y + (map->size_z * 0.90);
+	camera->position.z = map->size_z * 0.90;
+	camera->yaw = 1.0f;
+	camera->pitch = 0.90f;
 	camera->fov = 80.0f;
 	return (camera);
 }

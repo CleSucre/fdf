@@ -19,12 +19,11 @@ t_camera	*ft_init_camera(t_map *map)
 	camera = (t_camera *)malloc(sizeof(t_camera));
 	if (camera == NULL)
 		return (NULL);
-	camera->position.x = map->size_x / 2.0f;
-	camera->position.y = map->size_y / 2.0f;
-	camera->position.z = map->size_z / 2.0f
-		+ fmaxf(map->size_x, fmaxf(map->size_y, map->size_z));
-	camera->yaw = 0;
-	camera->pitch = 0;
+	camera->position.x = map->size_x * 0.90;
+	camera->position.y = map->size_y + (map->size_z * 0.90);
+	camera->position.z = map->size_z * 0.90;
+	camera->yaw = 1.0f;
+	camera->pitch = 0.90f;
 	camera->fov = 100.0f;
 	camera->mouse = (t_mouse_info *)malloc(sizeof(t_mouse_info));
 	if (camera->mouse == NULL)
