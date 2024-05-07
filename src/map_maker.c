@@ -68,19 +68,18 @@ static t_map	*ft_init_map(int maxX, int maxZ)
 	map = (t_map *)malloc(sizeof(t_map));
 	if (map == NULL)
 		return (NULL);
-	map->map_vector3 = (t_vector3 **)malloc(sizeof(t_vector3 *) * maxZ);
+	map->map_vector3 = (t_vector3 **)malloc(sizeof(t_vector3 *) * (maxZ));
 	if (map->map_vector3 == NULL)
 	{
 		free(map);
 		return (NULL);
 	}
-	i = 0;
-	while (i < maxZ)
+	i = -1;
+	while (++i < maxZ)
 	{
-		map->map_vector3[i] = (t_vector3 *)malloc(sizeof(t_vector3) * maxX);
+		map->map_vector3[i] = (t_vector3 *)malloc(sizeof(t_vector3) * (maxX));
 		if (map->map_vector3[i] == NULL)
 			return (ft_free_map(map));
-		i++;
 	}
 	map->size_x = maxX;
 	map->size_y = 0;
@@ -97,14 +96,14 @@ static t_map	*create_map_from_lines(char **lines)
 	i = ft_strlentab((const char **)lines);
 	map = ft_init_map(ft_count_words(lines[0], " "), i);
 	i = -1;
-	while (lines[i] && ++i < map->size_z)
+	while (++i < map->size_z && lines[i])
 	{
 		positions = ft_split(lines[i], " ");
 		ft_init_x(map, i, positions);
 		free(lines[i]);
 	}
 	free(lines);
-	map->transformed_point1 = malloc(sizeof(t_vector3));
+	map->transformed_point1 = (t_vector3 *)malloc(sizeof(t_vector3));
 	if (map->transformed_point1 == NULL)
 		return (ft_free_map(map));
 	map->transformed_point2 = malloc(sizeof(t_vector3));

@@ -64,6 +64,11 @@ static int	ft_fdf(char *filename)
 	t_win	*win;
 
 	fd = open(filename, O_RDONLY);
+	if (fd < 0)
+	{
+		ft_printf("Error\n");
+		return (1);
+	}
 	map = ft_get_map_from_file(fd);
 	close(fd);
 	if (map == NULL)

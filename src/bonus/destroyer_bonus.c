@@ -42,6 +42,8 @@ void	*ft_free_map(t_map *map)
 	free(map->line->point2);
 	free(map->line);
 	free(map->text);
+	free(map->transformed_point1);
+	free(map->transformed_point2);
 	free(map);
 	return (NULL);
 }
